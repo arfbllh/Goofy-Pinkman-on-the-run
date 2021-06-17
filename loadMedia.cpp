@@ -5,8 +5,14 @@ bool loadMedia()
 
 	//Load dot texture
 
-	//success = success &	gFont = TTF_OpenFont("assets/fonts.ttf", 30);
+	gFont = TTF_OpenFont("assets/font.ttf", 28);
 
+	if(gFont == NULL)
+	{
+		printf("Failed to laod font!");
+		printf("SDL_TTF Error: %s\n", TTF_GetError());
+		success = 0;
+	}
 	//map
 	success = success & westors_button.loadFromFile("assets/westors.png");
 	success = success & westors_button_sh.loadFromFile("assets/westors1.png");
@@ -38,7 +44,7 @@ bool loadMedia()
 	success = success & resume_button_sh.loadFromFile("assets/button_resume(1).png");
 
 	//music
-	
+
 	success = success & ((gHelp = Mix_LoadMUS("assets/help.mp3")) != NULL);
 	success = success & ((gClick = Mix_LoadWAV("assets/click.wav")) != NULL);
 
@@ -76,6 +82,7 @@ bool loadMedia()
 
 	//backgrond
 	success = success & forest.loadFromFile("assets/bg/bg1.png");
+	forest.mWidth = SCREEN_WIDTH;
 	success = success & tree1.loadFromFile("assets/bg/tree1.png");
 	success = success & tree2.loadFromFile("assets/bg/tree2.png");
 	success = success & mashroom.loadFromFile("assets/bg/mashroom.png");
@@ -86,10 +93,16 @@ bool loadMedia()
 	success = success & bush3.loadFromFile("assets/bg/bush3.png");
 	//bush3.mHeight = 80;
 	success = success & water1.loadFromFile("assets/bg/water1.png");
-	water1.mWidth = SCREEN_WIDTH;
+	water1.mWidth = 2*SCREEN_WIDTH;
 	success = success & water2.loadFromFile("assets/bg/water2.png");
 	water2.mWidth = 250;
 	success = success & path1.loadFromFile("assets/bg/path1.png");
+	success = success & path2.loadFromFile("assets/bg/path2.png");
+	success = success & path3.loadFromFile("assets/bg/path3.png");
+	success = success & path4.loadFromFile("assets/bg/path4.png");
+	success = success & path5.loadFromFile("assets/bg/path5.png");
+	path3.mWidth = 400;
+	path5.mWidth = 515;
 	path1.mWidth = SCREEN_WIDTH;
 
 
@@ -107,6 +120,12 @@ bool loadMedia()
 	success = success & mainmenu_button.loadFromFile("assets/button_mainmenu.png");
 	success = success &	mainmenu_button_sh.loadFromFile("assets/button_mainmenu(1).png");
 	success = success & gameover.loadFromFile("assets/gameover.png");
+	success = success & input_name0.loadFromFile("assets/input_name0.png");
+	success = success & input_name.loadFromFile("assets/input_name.png");
+	input_name0.mWidth = 500;
+	input_name.mWidth = 500;
+	input_name0.mHeight = 70;
+	input_name.mHeight = 70;
 	gameover.mWidth = 300;
 	gameover.mHeight = 250;
 
@@ -115,6 +134,21 @@ bool loadMedia()
 	success = success & obs[1].loadFromFile("assets/obs/obs1.png");
 	success = success & obs[2].loadFromFile("assets/obs/obs2.png");
 	success = success & obs[3].loadFromFile("assets/obs/obs3.png");
+
+	success = success & stone[1].loadFromFile("assets/obs/stone1.png");
+	success = success & stone[2].loadFromFile("assets/obs/stone2.png");
+	success = success & stone[3].loadFromFile("assets/obs/stone3.png");
+	success = success & stone[4].loadFromFile("assets/obs/stone4.png");
+
+	for(int i = 1; i < 4; i++){
+		stone[i].mWidth = 80;
+		stone[i].mHeight = 50;
+	}
+
+	for(int i = 1; i < 4; i++){
+		obs[i].mWidth = 50;
+		obs[i].mHeight = 80;
+	}
 
 	//Scaling
 	for(int state = 0; state < 9; state++) {
@@ -129,6 +163,29 @@ bool loadMedia()
 		pJump[state].mHeight *= 2.5;
 		pJump[state].mWidth += 30;
 	}
+
+
+
+
+	//file loading
+	//f1("score_board1.txt");
+	//f2("score_board2.txt");
+	for(int i = 0; i < 5; i++){
+		f1>>wName[i].ss>>wName[i].ff;
+		//cout<<wName[i]<<wScore[i];
+		if(wName[i].ss == "Empty"){
+			wName[i].ss = " ";
+		}
+	}
+	for(int i = 0; i < 5; i++){
+		f2>>pName[i].ss>>pName[i].ff;
+		//cout<<pName[i]<<pScore[i];
+		if(pName[i].ss == " Empty"){
+			pName[i].ss = "";
+		}
+	}
+	sort(wName.begin(), wName.end());
+	sort(pName.begin(), pName.end());
 
 
 	return success;

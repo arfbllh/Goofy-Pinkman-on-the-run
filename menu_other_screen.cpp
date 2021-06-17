@@ -325,7 +325,6 @@ void show_menu_otherscreen(SDL_Event e)
 						on_help = 0;
 						on_menu = 1;
 						SDL_Delay(50);
-						printf("click\n");
 					}
 				}
 
@@ -364,7 +363,6 @@ void show_menu_otherscreen(SDL_Event e)
 				on_menu = 0;
 				on_select_map = 0;
 				on_play = 1;
-				printf("here");
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 			}
 
@@ -432,7 +430,33 @@ void show_menu_otherscreen(SDL_Event e)
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 
-		gameover.render(buttonx, SCREEN_HEIGHT/2 - 200);
+		gameover.render(buttonx, SCREEN_HEIGHT/2 - 300);
+
+		input_name0.render(buttonx - 100, buttony);
+		input_name.render(buttonx - 100, buttony + button_interval);
+
+		// if(inputtext.length() == 0){
+		//  	inputtext = "Player Name";
+		// }
+
+		if(inputtext.length() > 0) inputtexttexture.loadFromRenderedText(inputtext.c_str(), textColor);
+
+
+		if(e.type == SDL_KEYDOWN)
+		{
+			if(keypressed == SDLK_BACKSPACE && inputtext.length() > 0){
+				inputtext.pop_back();
+			}
+
+		}
+		else if(e.type == SDL_TEXTINPUT)
+		{
+			if( !( SDL_GetModState() & KMOD_CTRL && ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' || e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) ) )
+			{
+				inputtext += e.text.text;
+			}
+
+		}
 
 		if(over_button(x, y, buttonx, buttony + button_interval*2, button_width, button_height))
 		{
@@ -446,6 +470,17 @@ void show_menu_otherscreen(SDL_Event e)
 				on_gameover = 0;
 				live = 3;
 				score = 0;
+				if(pwestors)
+				{
+					if(wName.size() == 5) wName.pop_back();
+					wName.push_back(pair<ll, string>(wCurrentScore, inputtext));
+					sort(wName.begin(), wName.end());
+				}
+				else if(pbravoos){
+					if(pName.size() == 5) pName.pop_back();
+					pName.push_back(pair<ll, string>(wCurrentScore, inputtext));
+					sort(pName.begin(), pName.end());
+				}
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 			}
 
@@ -461,10 +496,22 @@ void show_menu_otherscreen(SDL_Event e)
 				on_menu = 1;
 				on_gameover = 0;
 				live = 3;
+				if(pwestors)
+				{
+					if(wName.size() == 5) wName.pop_back();
+					wName.push_back(pair<ll, string>(wCurrentScore, inputtext));
+					sort(wName.begin(), wName.end());
+				}
+				else if(pbravoos){
+					if(pName.size() == 5) pName.pop_back();
+					pName.push_back(pair<ll, string>(wCurrentScore, inputtext));
+					sort(pName.begin(), pName.end());
+				}
+
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 			}
 		}
-
+		inputtexttexture.render(buttonx - 92, buttony + button_interval + 5);
 		if(!try_shadow) try_button.render(buttonx, buttony + button_interval*2);
 		else try_button_sh.render(buttonx, buttony + button_interval*2);
 

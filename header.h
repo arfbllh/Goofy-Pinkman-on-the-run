@@ -2,12 +2,17 @@
 #include<SDL2/SDL_image.h>
 #include<SDL2/SDL_ttf.h>
 #include<SDL2/SDL_mixer.h>
-#include<stdio.h>
+#include<bits/stdc++.h>
 #include<string>
 #include<sstream>
+using namespace std;
 
 
 #define keypressed e.key.keysym.sym
+#define ll long long
+#define ff first
+#define ss second
+
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
@@ -15,12 +20,25 @@ const int SCREEN_HEIGHT = 720;
 
 int sound = 1;
 int music = 1;
+ll wCurrentScore = 0;
+ll pCurrentScore = 0;
+ll wScore[5];
+ll pScore[5];
+vector<pair<ll, string>> wName(5), pName(5);
+string inputtext = "";
+
+	
+fstream f1("score_board1.txt");
+fstream f2("score_board2.txt");;
 
 int pinkmanx = 0, pinkmany = 0, vel = 10, mVelX= 0, mVelY = 0, state = 0;
 
 double width_ratio, heigt_ratio;
 
 int scrollingOffset = 0;
+
+int live;
+int score;
 
 
 //Texture wrapper class
@@ -98,12 +116,22 @@ LTexture gPinkManTexture;
 LTexture pFly[10];
 LTexture pRun[10];
 LTexture pJump[10];
+//background texture
+LTexture forest, road, tree1, tree2, mashroom, bush1, bush2, bush3, water1, water2, path1, path2, path3, path4, path5;
 LTexture play_button, play_button_sh, setting_button, setting_button_sh, score_button, score_button_sh, help_button, help_button_sh, quit_button, quit_button_sh;
-LTexture sound_button, on_button, on_button_sh, on_button_on, off_button, off_button_sh, off_button_on, back_button;
+LTexture pause_button, pause_button_sh, resume_button, resume_button_sh;
+LTexture sound_button, on_button, on_button_sh, on_button_on, off_button, off_button_sh, off_button_on, back_button, back_button_sh;
+LTexture life, broken_heart, bravoos_button, bravoos_button_sh, westors_button, westors_button_sh;
+LTexture try_button, try_button_sh, mainmenu_button, mainmenu_button_sh, gameover, input_name0, input_name;
+LTexture obs[10];
+LTexture stone[5];
 
 SDL_Rect wall_u[5];
 SDL_Rect wall_d[5];
 TTF_Font *gFont = NULL;
+LTexture inputtexttexture;
+
+SDL_Color textColor = {255, 128, 0, 0xff};
 
 LTexture::LTexture()
 {
@@ -166,6 +194,9 @@ bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColo
 	free();
 
 	//Render text surface
+	if(textureText.length() == 0){
+		textureText = " ";
+	}
 	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
 	if( textSurface != NULL )
 	{
@@ -410,6 +441,14 @@ void pinkman_move()
 void close()
 {
 	//Free loaded images
+	f1.clear();
+	f2.clear();
+	for(int i = 0; i < 5; i++){
+		f1<<wName[i].ss<<" "<<wName[i].ff<<endl;
+	}
+	for(int i = 0; i < 5; i++){
+		f1<<wName[i].ss<<" "<<wName[i].ff<<endl;
+	}
 	gBGTexture.free();
 	gFirstScreenTexture.free();
 	gScoreTexture.free();
