@@ -315,18 +315,22 @@ void show_menu_otherscreen(SDL_Event e)
 
 		if(Mix_PlayingMusic() == 0) Mix_PlayMusic(gHelp, -1);
 
-		back_button.render(buttonx, play_buttony + 350);
-
 		if(over_button(x, y, buttonx, play_buttony + 350, button_width, button_height)){
-					SDL_Delay(25);
-					back_shadow = 1;
-					if(e.type == SDL_MOUSEBUTTONDOWN){
-						if(sound) Mix_PlayChannel(-1, gClick, 0);
-						on_help = 0;
-						on_menu = 1;
-						SDL_Delay(50);
-					}
-				}
+			SDL_Delay(25);
+			back_shadow = 1;
+			if(e.type == SDL_MOUSEBUTTONDOWN)
+			{
+				on_help = 0;
+				on_menu = 1;
+				SDL_Delay(50);
+				back_shadow = 0;
+				if(sound) Mix_PlayChannel(-1, gClick, 0);
+			}
+		}
+		else back_shadow = 0;
+
+		if(!back_shadow) back_button.render(buttonx, play_buttony + 350);
+		else back_button_sh.render(buttonx, play_buttony + 350);
 
 		SDL_RenderPresent(gRenderer);
 
@@ -439,7 +443,7 @@ void show_menu_otherscreen(SDL_Event e)
 		//  	inputtext = "Player Name";
 		// }
 
-		if(inputtext.length() > 0) inputtexttexture.loadFromRenderedText(inputtext.c_str(), textColor);
+		inputtexttexture.loadFromRenderedText(inputtext.c_str(), textColor);
 
 
 		if(e.type == SDL_KEYDOWN)
@@ -468,19 +472,22 @@ void show_menu_otherscreen(SDL_Event e)
 				pause = 0;
 				on_play = 1;
 				on_gameover = 0;
-				live = 3;
+				live = 1;
 				score = 0;
+				scroll = 0;
+				pinkmanx = 0;
 				if(pwestors)
 				{
 					if(wName.size() == 5) wName.pop_back();
-					wName.push_back(pair<ll, string>(wCurrentScore, inputtext));
-					sort(wName.begin(), wName.end());
+					wName.push_back(PLLS(wCurrentScore, inputtext));
+					sort(wName.rbegin(), wName.rend());
 				}
 				else if(pbravoos){
 					if(pName.size() == 5) pName.pop_back();
-					pName.push_back(pair<ll, string>(wCurrentScore, inputtext));
-					sort(pName.begin(), pName.end());
+					pName.push_back(PLLS(wCurrentScore, inputtext));
+					sort(pName.rbegin(), pName.rend());
 				}
+				inputtext.clear();
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 			}
 
@@ -491,24 +498,26 @@ void show_menu_otherscreen(SDL_Event e)
 			mainmenu_shadow = 1;
 
 			if(e.type == SDL_MOUSEBUTTONDOWN){
-				pwestors = 0;
-				pbravoos = 0;
-				on_menu = 1;
-				on_gameover = 0;
-				live = 3;
 				if(pwestors)
 				{
 					if(wName.size() == 5) wName.pop_back();
-					wName.push_back(pair<ll, string>(wCurrentScore, inputtext));
-					sort(wName.begin(), wName.end());
+					wName.push_back(PLLS(wCurrentScore, inputtext));
+					sort(wName.rbegin(), wName.rend());
 				}
 				else if(pbravoos){
 					if(pName.size() == 5) pName.pop_back();
-					pName.push_back(pair<ll, string>(wCurrentScore, inputtext));
-					sort(pName.begin(), pName.end());
+					pName.push_back(PLLS(wCurrentScore, inputtext));
+					sort(pName.rbegin(), pName.rend());
 				}
-
+				pwestors = 0;
+				pbravoos = 0;
+				//on_menu = 1;
+				on_gameover = 0;
+				live = 3;
+				pinkmanx = 0;
+				inputtext.clear();
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
+				on_menu = 1;
 			}
 		}
 		inputtexttexture.render(buttonx - 92, buttony + button_interval + 5);
@@ -522,6 +531,57 @@ void show_menu_otherscreen(SDL_Event e)
 	}
 	else if(on_score)
 	{
+		SDL_GetMouseState(&x,  &y);
+		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+		SDL_RenderClear(gRenderer);
+
+
+		wScoreCard.render(0, 0);
+		pScoreCard.render(0, 350);
+		int intervel = 45;
+		int px = 155, py = 132;
+		back_button.mWidth = back_button_sh.mWidth = 200;
+		back_button.mHeight = back_button_sh.mHeight = 50;
+		for(int i = 0; i < wName.size(); i++)
+		{
+			nametexture.loadFromRenderedText(wName[i].ss.c_str(), textColor);
+			string temp = to_string(wName[i].ff);
+			scoretexture.loadFromRenderedText(temp.c_str(), textColor);
+			nametexture.render(px, py);
+			scoretexture.render(950, py);
+			py += intervel;
+		}
+		py = 480;
+		for(int i = 0; i < pName.size(); i++)
+		{
+			nametexture.loadFromRenderedText(pName[i].ss.c_str(), textColor);
+			string temp = to_string(wName[i].ff);
+			scoretexture.loadFromRenderedText(temp.c_str(), textColor);
+			nametexture.render(px, py);
+			scoretexture.render(950, py);
+			py += intervel;
+		}
+
+		if(over_button(x, y, 0, 5, 200, 50)){
+			SDL_Delay(25);
+			back_shadow = 1;
+
+			if(e.type == SDL_MOUSEBUTTONDOWN){
+
+				on_score = 0;
+				on_menu = 1;
+				if(sound) Mix_PlayChannel(-1, gClick, 0);
+				SDL_Delay(100);
+			}
+		}
+		else back_shadow = 0;
+		if(!back_shadow) back_button.render(0, 5);
+		else back_button_sh.render(0, 5);
+		//printf("%d %d\n", x, y);
+		SDL_RenderPresent(gRenderer);
+
+		back_button.mWidth = back_button_sh.mWidth = button_width;
+		back_button.mHeight = back_button_sh.mHeight = button_height;
 
 	}
 }

@@ -1,14 +1,4 @@
-Empty 0
-Empty 0
-Empty 0
-Empty 0
-Empty 0  0
-  0
-  0
-  0
-arif 0
-  0
-  0
-  0
-  0
-arif 0
+5 0
+6 0
+78899522 0
+97 0

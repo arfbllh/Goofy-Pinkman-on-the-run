@@ -164,29 +164,40 @@ bool loadMedia()
 		pJump[state].mWidth += 30;
 	}
 
-
-
-
-	//file loading
-	//f1("score_board1.txt");
-	//f2("score_board2.txt");
-	for(int i = 0; i < 5; i++){
-		f1>>wName[i].ss>>wName[i].ff;
-		//cout<<wName[i]<<wScore[i];
-		if(wName[i].ss == "Empty"){
-			wName[i].ss = " ";
-		}
+	//file opening	
+	fstream f1("score_board1.txt");
+	fstream f2("score_board2.txt");
+	string name;
+	ll tscore;
+	while(f1>>name>>tscore){
+		wName.push_back(PLLS(tscore, name));
 	}
-	for(int i = 0; i < 5; i++){
-		f2>>pName[i].ss>>pName[i].ff;
-		//cout<<pName[i]<<pScore[i];
-		if(pName[i].ss == " Empty"){
-			pName[i].ss = "";
-		}
+	while(f2>>name>>tscore){
+		pName.push_back(PLLS(tscore, name));
+		//cout<<name<<endl;
 	}
 	sort(wName.begin(), wName.end());
 	sort(pName.begin(), pName.end());
+	f1.close();
+	f2.close();
 
+
+	success = success & pScoreCard.loadFromFile("assets/pscore.png");
+	success = success & wScoreCard.loadFromFile("assets/wscore.png");
+	pScoreCard.mHeight = wScoreCard.mHeight = 360;
+
+	success = success & coin.loadFromFile("assets/coin.png");
+	success = success & coin1.loadFromFile("assets/coin1.png");
+	success = success & diamond.loadFromFile("assets/diamond.png");
+	success = success & diamond1.loadFromFile("assets/diamond1.png");
+	success = success & love.loadFromFile("assets/love.png");
+	success = success & love1.loadFromFile("assets/love1.png");
+	coin.mWidth = coin.mHeight = 50;
+	coin1.mWidth = coin1.mHeight = 50;
+	diamond.mWidth = diamond.mHeight = 50;
+	diamond1.mWidth = diamond1.mHeight = 50;
+	love.mWidth = love.mHeight = 50;
+	love1.mWidth = love1.mHeight = 50;
 
 	return success;
 }

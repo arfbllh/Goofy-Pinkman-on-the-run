@@ -4,7 +4,7 @@
 
 #define min(x, y) (x < y) ? x : y;
 int g = 1;
-int scroll = 0;
+int ground = 570;
 int water_zone = 250;
 bool obs_water = 0;
 int obstacle = 1;
@@ -14,7 +14,18 @@ int obsx = 1600;
 int obsy;
 int stonex = 200;
 int stones = 1;
-void background(){
+ll wtotal_dist = 0;
+ll btotal_dist = 0;
+int love_show = 0;
+int diamond_show = 0;
+int coin_show = 0;
+int lovex, lovey, loved, coinx, coiny, coined, diamondx, diamondy, diamonded;
+int coin_score = 0, diamond_score = 0;
+int wspeed = 2;
+int bspeed = 2;
+
+void background()
+{
 
 	//SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	//SDL_RenderClear(gRenderer);
@@ -62,6 +73,23 @@ void background(){
 	obs[obstacle].render(-obsx + scroll + 2*SCREEN_WIDTH, obsy);
 	stone[stones].render(-stonex + scroll + 2*SCREEN_WIDTH, 570 - stone[stones].mHeight);
 
+	for(int i = 0; i < live; i++){
+		life.render(i*30, 0);
+	}
+
+
+	if(love_show > 0) {
+		if(!loved) love.render(lovex + love_show, lovey);
+		else love1.render(lovex + love_show, lovey);
+	}
+	if(coin_show > 0) {
+		if(!coined) coin.render(coinx + coin_show, coiny);
+		else coin1.render(coinx + coin_show, coiny);
+	}
+	if(diamond_show > 0){
+		if(!diamonded) diamond.render(diamondx + diamond_show, diamondy);
+		else diamond1.render(diamondx + diamond_show, diamondy);
+	}
 
 	//SDL_RenderPresent(gRenderer);
 }
@@ -76,7 +104,7 @@ int main()
 	int screen = 0;
 	int run = 1, fly = 0;
 
-	live = 1;
+	live = 3;
 	pinkmany = SCREEN_HEIGHT - 150;
 	obstacle = 1;
 	obsy = 570 - obs[obstacle].mHeight;
@@ -126,13 +154,8 @@ int main()
 
 				
 				//background
-				background();
-
-				for(int i = 0; i < live; i++){
-					life.render(i*30, 0);
-				}
-				
-				scroll -= 4;
+				background();				
+				scroll -= wspeed;
 				if(scroll < -2*SCREEN_WIDTH) {
 					scroll = 0;
 					obstacle++;
@@ -141,10 +164,18 @@ int main()
 						obstacle = 1;
 						stones = 1;
 					}
+					love_show = 0;
+					coin_show = 0;
+					diamond_show = 0;
+					diamonded = 0;
+					loved = 0;
+					coined = 0;
+
 					//obsx += SCREEN_WIDTH;
 				}
 
 				if(scroll < -SCREEN_WIDTH){
+
 					reel++;
 				}
 
@@ -186,6 +217,34 @@ int main()
 								continue;
 							}
 						}
+
+						//coin, diamond and love collision during jump
+						if(love_show > 0){
+							SDL_Rect loverect = {lovex - love_show, lovey, love.mWidth, love.mHeight};
+							if(checkCollision(a, loverect)){
+								if(live < 3) live++;
+								loved = 1;
+							}
+							love_show -= wspeed;
+						}
+						if(coin_show > 0){
+							SDL_Rect coinrect = {coinx - coin_show, coiny, coin.mWidth, coin.mHeight};
+							if(checkCollision(a, coinrect)){
+								score += 10;
+								coin_score++;
+							}
+							coin_show -= wspeed;
+						}
+						if(diamond_show > 0){
+							SDL_Rect drect = {diamondx - diamond_show, diamondy, diamond.mWidth, diamond.mHeight};
+							if(checkCollision(a, drect)){
+								diamonded = 1;
+								score += 100;
+								diamond_score++;
+							}
+							diamond_show -= wspeed;
+						}
+
 						SDL_RenderPresent(gRenderer);
 						SDL_Delay(50);
 						//printf("%d\n", y[i]);
@@ -242,6 +301,36 @@ int main()
 						}
 					}				
 				}
+				//coin, diamond and love render and collision
+				if(love_show > 0){
+					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
+					SDL_Rect loverect = {lovex + scroll, lovey, love.mWidth, love.mHeight};
+					if(checkCollision(a, loverect)){
+						if(live < 3) live++;
+						loved = 1;
+					}
+					love_show -= wspeed;
+				}
+				if(coin_show > 0){
+					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
+					SDL_Rect coinrect = {coinx + scroll, coiny, coin.mWidth, coin.mHeight};
+					if(checkCollision(a, coinrect)){
+						score += 10;
+						coin_score++;
+					}
+					coin_show -= wspeed;
+				}
+				if(diamond_show > 0){
+					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
+					SDL_Rect drect = {diamondx + scroll, diamondy, diamond.mWidth, diamond.mHeight};
+					if(checkCollision(a, drect)){
+						diamonded = 1;
+						score += 100;
+						diamond_score++;
+					}
+					diamond_show -= wspeed;
+				}
+
 				if(pinkmanx  + pRun[state].mWidth >= SCREEN_WIDTH) {
 					pinkmanx = 0;
 					scroll = 0;
@@ -252,14 +341,44 @@ int main()
 						obstacle = 1;
 						stones = 1;
 					}
-
+					love_show = 0;
+					coin_show = 0;
+					diamond_show = 0;
+					diamonded = 0;
+					loved = 0;
+					coined = 0;
 					//p++;
 				}
 
 				screen++;
 				if(screen > 71) screen = 0;
+				wtotal_dist += wspeed;
 
+				//coin, diamond, love controller
+				srand(time(0));
+				if(wtotal_dist%2000 <= wspeed && love_show <= 0){
+					love_show = SCREEN_WIDTH;
+					lovex = SCREEN_WIDTH + scroll + rand()%200;
+					lovey = ground - rand()%150 - 50;
+					loved = 0;
+				}
+				if(wtotal_dist%1000 <= wspeed && coin_show <= 0 && love_show <= 0 && diamond_show <= 0){
+					coin_show = SCREEN_WIDTH;
+					coinx = SCREEN_WIDTH + scroll + rand()%200;
+					coiny = ground - rand()%50 - 50;
+					coined = 0;
+				}
+				if(wtotal_dist%1500 <= wspeed && love_show <= 0 && diamond_show <= 0){
+					diamond_show = SCREEN_WIDTH;;
+					diamondx = SCREEN_WIDTH + scroll + rand()%200;
+					diamondy = ground - rand()%100 - 50;
+					diamonded = 0;
+				}
 				//printf("%d %d\n", pinkmanx, pinkmany);
+
+				if(wtotal_dist%(2*SCREEN_WIDTH) == wspeed){
+					wspeed = min(wspeed + 1, 10);
+				}
 			}
 
 			SDL_RenderPresent(gRenderer);

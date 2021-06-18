@@ -12,6 +12,7 @@ using namespace std;
 #define ll long long
 #define ff first
 #define ss second
+#define PLLS pair<ll, string>
 
 
 //Screen dimension constants
@@ -24,12 +25,8 @@ ll wCurrentScore = 0;
 ll pCurrentScore = 0;
 ll wScore[5];
 ll pScore[5];
-vector<pair<ll, string>> wName(5), pName(5);
+vector<PLLS> wName, pName;
 string inputtext = "";
-
-	
-fstream f1("score_board1.txt");
-fstream f2("score_board2.txt");;
 
 int pinkmanx = 0, pinkmany = 0, vel = 10, mVelX= 0, mVelY = 0, state = 0;
 
@@ -39,6 +36,7 @@ int scrollingOffset = 0;
 
 int live;
 int score;
+int scroll = 0;
 
 
 //Texture wrapper class
@@ -123,13 +121,15 @@ LTexture pause_button, pause_button_sh, resume_button, resume_button_sh;
 LTexture sound_button, on_button, on_button_sh, on_button_on, off_button, off_button_sh, off_button_on, back_button, back_button_sh;
 LTexture life, broken_heart, bravoos_button, bravoos_button_sh, westors_button, westors_button_sh;
 LTexture try_button, try_button_sh, mainmenu_button, mainmenu_button_sh, gameover, input_name0, input_name;
+LTexture pScoreCard, wScoreCard;
+LTexture coin, diamond, love, coin1, diamond1, love1;
 LTexture obs[10];
 LTexture stone[5];
 
 SDL_Rect wall_u[5];
 SDL_Rect wall_d[5];
 TTF_Font *gFont = NULL;
-LTexture inputtexttexture;
+LTexture inputtexttexture, nametexture, scoretexture;
 
 SDL_Color textColor = {255, 128, 0, 0xff};
 
@@ -441,13 +441,19 @@ void pinkman_move()
 void close()
 {
 	//Free loaded images
-	f1.clear();
-	f2.clear();
-	for(int i = 0; i < 5; i++){
+	
+	ofstream f1;
+	f1.open("score_board1.txt");
+	ofstream f2;
+	f2.open("score_board2.txt");
+	for(int i = 0; i < wName.size(); i++){
 		f1<<wName[i].ss<<" "<<wName[i].ff<<endl;
+		//cout<<wName[i].ss<<" "<<wName[i].ff<<endl;
+		f1.flush();
 	}
-	for(int i = 0; i < 5; i++){
-		f1<<wName[i].ss<<" "<<wName[i].ff<<endl;
+	for(int i = 0; i < pName.size(); i++){
+		f2<<pName[i].ss<<" "<<pName[i].ff<<endl;
+		f2.flush();
 	}
 	gBGTexture.free();
 	gFirstScreenTexture.free();
