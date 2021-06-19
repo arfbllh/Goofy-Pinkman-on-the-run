@@ -2,7 +2,8 @@
 #include "menu_other_screen.cpp"
 #include "loadMedia.cpp"
 
-#define min(x, y) (x < y) ? x : y;
+#define MIN(x, y) (x < y) ? x : y
+#define MAX(x, y) (x > y) ? x : y
 int g = 1;
 int ground = 570;
 int water_zone = 250;
@@ -20,10 +21,11 @@ int love_show = 0;
 int diamond_show = 0;
 int coin_show = 0;
 int lovex, lovey, loved, coinx, coiny, coined, diamondx, diamondy, diamonded;
+int coinscroll = 0, diamondscroll = 0, lovescroll = 0, fobsscroll = 0;
 int coin_score = 0, diamond_score = 0;
 int wspeed = 2;
 int bspeed = 2;
-
+int fobsx, fobsy, fobs_show = 1;
 void background()
 {
 
@@ -103,6 +105,11 @@ void background()
 	temp = to_string(wCurrentScore);
 	scoretexture.loadFromRenderedText(temp, textColor);
 	scoretexture.render(600, 0);
+
+
+	if(fobs_show)
+		fobs.render(SCREEN_WIDTH + scroll, fobsy, NULL, NULL, NULL, SDL_FLIP_VERTICAL);
+	
 
 	//SDL_RenderPresent(gRenderer);
 }
@@ -300,7 +307,9 @@ int main()
 					SDL_Rect b = {scroll + SCREEN_WIDTH + 515, SCREEN_HEIGHT - 150 + 50, water2.mWidth, water2.mHeight};
 					SDL_Rect c = {-obsx + scroll + 2*SCREEN_WIDTH, obsy, obs[obstacle].mWidth, obs[obstacle].mHeight};
 					SDL_Rect d = {-stonex + scroll + 2*SCREEN_WIDTH, 570 - stone[stones].mHeight, stone[stones].mWidth, stone[stones].mHeight};
-					if(checkCollision(a, b) || checkCollision(a, c) || checkCollision(a, d)){
+					SDL_Rect f = {-1, -1, 0, 0};
+					if(fobs_show > 0) f = {fobsx + scroll, fobsy, fobs.mWidth, fobs.mHeight};
+					if(checkCollision(a, b) || checkCollision(a, c) || checkCollision(a, d) || checkCollision(a, f)){
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 							SDL_RenderClear(gRenderer);
@@ -318,6 +327,14 @@ int main()
 							continue;
 						}
 					}				
+				}
+				//falling obstacl 
+				if(fobs_show)
+				{
+					fobsy = MIN(ground - fobs.mHeight, fobsy + wspeed);
+					fobs_show -= wspeed;
+					if(fobs_show < 0) fobs_show = 0;
+
 				}
 				//coin, diamond and love render and collision
 				if(love_show > 0 && !loved){
@@ -375,28 +392,41 @@ int main()
 
 				//coin, diamond, love controller
 				
-				if(wtotal_dist%2000 == 0 && love_show <= 0){
+				if(lovescroll >= 1500 && love_show <= 0){
 					srand(time(0));
 					love_show = SCREEN_WIDTH;
 					lovex = SCREEN_WIDTH - scroll - rand()%200;
 					lovey = ground - rand()%150 - 50;
 					loved = 0;
+					lovescroll = 0;
 				}
-				if(wtotal_dist%50 == 0 && wtotal_dist%300 != 0 && coin_show <= 0 && love_show <= 0 && diamond_show <= 0){
+				if(coinscroll >= 600){
 					srand(time(0));
 					coin_show = SCREEN_WIDTH;
 					coinx = SCREEN_WIDTH - scroll - rand()%500;
 					coiny = ground - rand()%50 - 50;
 					coined = 0;
+					coinscroll = 0;
 				}
-				if(wtotal_dist%300 == 0 && love_show <= 0 && diamond_show <= 0){
+				if(diamondscroll >= 1280){
 					srand(time(0));
 					diamond_show = SCREEN_WIDTH;;
-					diamondx = SCREEN_WIDTH - scroll - rand()%2500;
+					diamondx = SCREEN_WIDTH - scroll - rand()%500;
 					diamondy = ground - rand()%100 - 50;
 					diamonded = 0;
+					diamondscroll = 0;
+				}
+				if(fobsscroll >= 1500){
+					fobs_show = SCREEN_WIDTH;
+					fobsx = SCREEN_WIDTH - scroll;
+					fobsy = 0;
+					fobsscroll = 0;
 				}
 				//printf("%d %d\n", pinkmanx, pinkmany);
+				lovescroll += wspeed; 
+				coinscroll += wspeed; 
+				diamondscroll += wspeed; 
+				fobsscroll += wspeed;
 
 				if(wtotal_dist%(2*SCREEN_WIDTH) == 0){
 					wspeed = min(wspeed + 1, 10);

@@ -136,6 +136,9 @@ bool loadMedia()
 	success = success & obs[3].loadFromFile("assets/obs/obs3.png");
 	success = success & fobs.loadFromFile("assets/obs/obs4.png");
 
+	fobs.mWidth = 150;
+	fobs.mHeight = 80;
+
 	success = success & stone[1].loadFromFile("assets/obs/stone1.png");
 	success = success & stone[2].loadFromFile("assets/obs/stone2.png");
 	success = success & stone[3].loadFromFile("assets/obs/stone3.png");
