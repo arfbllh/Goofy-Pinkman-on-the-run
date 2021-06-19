@@ -123,6 +123,9 @@ LTexture life, broken_heart, bravoos_button, bravoos_button_sh, westors_button, 
 LTexture try_button, try_button_sh, mainmenu_button, mainmenu_button_sh, gameover, input_name0, input_name;
 LTexture pScoreCard, wScoreCard;
 LTexture coin, diamond, love, coin1, diamond1, love1;
+LTexture coinscoretexture1, diamondscoretexture1;
+LTexture coinscoretexture, diamondscoretexture;
+LTexture fobs;
 LTexture obs[10];
 LTexture stone[5];
 
@@ -471,4 +474,9 @@ void close()
 	IMG_Quit();
 	SDL_Quit();
 	TTF_Quit();
+}
+
+bool fsort(PLLS a, PLLS b)
+{
+	return a.ff > b.ff;
 }

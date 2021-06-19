@@ -480,12 +480,12 @@ void show_menu_otherscreen(SDL_Event e)
 				{
 					if(wName.size() == 5) wName.pop_back();
 					wName.push_back(PLLS(wCurrentScore, inputtext));
-					sort(wName.rbegin(), wName.rend());
+					sort(wName.begin(), wName.end(), fsort);
 				}
 				else if(pbravoos){
 					if(pName.size() == 5) pName.pop_back();
-					pName.push_back(PLLS(wCurrentScore, inputtext));
-					sort(pName.rbegin(), pName.rend());
+					pName.push_back(PLLS(pCurrentScore, inputtext));
+					sort(pName.begin(), pName.end(), fsort);
 				}
 				inputtext.clear();
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
@@ -502,12 +502,13 @@ void show_menu_otherscreen(SDL_Event e)
 				{
 					if(wName.size() == 5) wName.pop_back();
 					wName.push_back(PLLS(wCurrentScore, inputtext));
-					sort(wName.rbegin(), wName.rend());
+					sort(wName.begin(), wName.end(), fsort);
 				}
 				else if(pbravoos){
 					if(pName.size() == 5) pName.pop_back();
-					pName.push_back(PLLS(wCurrentScore, inputtext));
-					sort(pName.rbegin(), pName.rend());
+					pName.push_back(PLLS(pCurrentScore, inputtext));
+					sort(pName.begin(), pName.end(), fsort);
+					
 				}
 				pwestors = 0;
 				pbravoos = 0;
@@ -555,7 +556,7 @@ void show_menu_otherscreen(SDL_Event e)
 		for(int i = 0; i < pName.size(); i++)
 		{
 			nametexture.loadFromRenderedText(pName[i].ss.c_str(), textColor);
-			string temp = to_string(wName[i].ff);
+			string temp = to_string(pName[i].ff);
 			scoretexture.loadFromRenderedText(temp.c_str(), textColor);
 			nametexture.render(px, py);
 			scoretexture.render(950, py);

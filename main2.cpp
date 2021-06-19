@@ -10,7 +10,7 @@ bool obs_water = 0;
 int obstacle = 1;
 int reel = 0;
 int p = 0;
-int obsx = 1600;
+int obsx = 1800;
 int obsy;
 int stonex = 200;
 int stones = 1;
@@ -79,17 +79,30 @@ void background()
 
 
 	if(love_show > 0) {
-		if(!loved) love.render(lovex + love_show, lovey);
-		else love1.render(lovex + love_show, lovey);
+		if(!loved) love.render(lovex + scroll, lovey);
+		else love1.render(lovex + scroll, lovey);
 	}
 	if(coin_show > 0) {
-		if(!coined) coin.render(coinx + coin_show, coiny);
-		else coin1.render(coinx + coin_show, coiny);
+		if(!coined) coin.render(coinx + scroll, coiny);
+		else coin1.render(coinx + scroll, coiny);
 	}
 	if(diamond_show > 0){
-		if(!diamonded) diamond.render(diamondx + diamond_show, diamondy);
-		else diamond1.render(diamondx + diamond_show, diamondy);
+		if(!diamonded) diamond.render(diamondx + scroll, diamondy);
+		else diamond1.render(diamondx + scroll, diamondy);
 	}
+
+	std::string temp = to_string(coin_score);
+	coinscoretexture1.loadFromRenderedText(temp.c_str(), textColor);
+	coinscoretexture.render(880, 5);
+	coinscoretexture1.render(930, 0);
+	temp = to_string(diamond_score);
+	diamondscoretexture1.loadFromRenderedText(temp.c_str(), textColor);
+	diamondscoretexture.render(980, 5);
+	diamondscoretexture1.render(1030, 0);
+
+	temp = to_string(wCurrentScore);
+	scoretexture.loadFromRenderedText(temp, textColor);
+	scoretexture.render(600, 0);
 
 	//SDL_RenderPresent(gRenderer);
 }
@@ -164,12 +177,12 @@ int main()
 						obstacle = 1;
 						stones = 1;
 					}
-					love_show = 0;
-					coin_show = 0;
-					diamond_show = 0;
-					diamonded = 0;
-					loved = 0;
-					coined = 0;
+					// love_show = 0;
+					// coin_show = 0;
+					// diamond_show = 0;
+					// diamonded = 0;
+					// loved = 0;
+					// coined = 0;
 
 					//obsx += SCREEN_WIDTH;
 				}
@@ -185,7 +198,6 @@ int main()
 				//checking jump
 				if(keystates[SDL_SCANCODE_RETURN] || keystates[SDL_SCANCODE_J]) {
 					//give a jump
-					int x = pinkmanx;
 					int y[9] = {257, 287, 317, 337, 337, 300, 287, 257, 257};
 					for(int i = 0; i < 9; i++){
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -194,9 +206,9 @@ int main()
 						//background
 						background();
 
-						pJump[i].render(x, SCREEN_HEIGHT - y[i]);
+						pJump[i].render(pinkmanx, SCREEN_HEIGHT - y[i]);
 
-						SDL_Rect a = {x, SCREEN_HEIGHT - pJump[i].mHeight - y[i], pJump[i].mWidth, pJump[i].mHeight};
+						SDL_Rect a = {pinkmanx, SCREEN_HEIGHT - pJump[i].mHeight - y[i], pJump[i].mWidth, pJump[i].mHeight};
 						SDL_Rect b = {scroll + SCREEN_WIDTH + 515, SCREEN_HEIGHT - 150 + 50, water2.mWidth, water2.mHeight};
 						SDL_Rect c = {obsx, obsy, obs[obstacle].mWidth, obs[obstacle].mHeight};
 
@@ -219,24 +231,28 @@ int main()
 						}
 
 						//coin, diamond and love collision during jump
-						if(love_show > 0){
-							SDL_Rect loverect = {lovex - love_show, lovey, love.mWidth, love.mHeight};
+						if(love_show > 0 && !loved){
+							SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
+							SDL_Rect loverect = {lovex + scroll, lovey, love.mWidth, love.mHeight};
 							if(checkCollision(a, loverect)){
 								if(live < 3) live++;
 								loved = 1;
 							}
 							love_show -= wspeed;
 						}
-						if(coin_show > 0){
-							SDL_Rect coinrect = {coinx - coin_show, coiny, coin.mWidth, coin.mHeight};
+						if(coin_show > 0 && !coined){
+							SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
+							SDL_Rect coinrect = {coinx + scroll, coiny, coin.mWidth, coin.mHeight};
 							if(checkCollision(a, coinrect)){
 								score += 10;
 								coin_score++;
+								coined = 1;
 							}
 							coin_show -= wspeed;
 						}
-						if(diamond_show > 0){
-							SDL_Rect drect = {diamondx - diamond_show, diamondy, diamond.mWidth, diamond.mHeight};
+						if(diamond_show > 0 && !diamonded){
+							SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
+							SDL_Rect drect = {diamondx + scroll, diamondy, diamond.mWidth, diamond.mHeight};
 							if(checkCollision(a, drect)){
 								diamonded = 1;
 								score += 100;
@@ -245,14 +261,16 @@ int main()
 							diamond_show -= wspeed;
 						}
 
+
 						SDL_RenderPresent(gRenderer);
 						SDL_Delay(50);
 						//printf("%d\n", y[i]);
 
-						x += 60 - (i >= 7)*60;
+						pinkmanx += 60 - (i >= 7)*60;
 						//scroll -= 12;
 					}
-					pinkmanx = x;
+				
+					wCurrentScore += 5;
 					//jump++;
 				}
 				else
@@ -302,7 +320,7 @@ int main()
 					}				
 				}
 				//coin, diamond and love render and collision
-				if(love_show > 0){
+				if(love_show > 0 && !loved){
 					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 					SDL_Rect loverect = {lovex + scroll, lovey, love.mWidth, love.mHeight};
 					if(checkCollision(a, loverect)){
@@ -311,16 +329,17 @@ int main()
 					}
 					love_show -= wspeed;
 				}
-				if(coin_show > 0){
+				if(coin_show > 0 && !coined){
 					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 					SDL_Rect coinrect = {coinx + scroll, coiny, coin.mWidth, coin.mHeight};
 					if(checkCollision(a, coinrect)){
 						score += 10;
 						coin_score++;
+						coined = 1;
 					}
 					coin_show -= wspeed;
 				}
-				if(diamond_show > 0){
+				if(diamond_show > 0 && !diamonded){
 					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 					SDL_Rect drect = {diamondx + scroll, diamondy, diamond.mWidth, diamond.mHeight};
 					if(checkCollision(a, drect)){
@@ -352,34 +371,40 @@ int main()
 
 				screen++;
 				if(screen > 71) screen = 0;
-				wtotal_dist += wspeed;
+				wtotal_dist++;
 
 				//coin, diamond, love controller
-				srand(time(0));
-				if(wtotal_dist%2000 <= wspeed && love_show <= 0){
+				
+				if(wtotal_dist%2000 == 0 && love_show <= 0){
+					srand(time(0));
 					love_show = SCREEN_WIDTH;
-					lovex = SCREEN_WIDTH + scroll + rand()%200;
+					lovex = SCREEN_WIDTH - scroll - rand()%200;
 					lovey = ground - rand()%150 - 50;
 					loved = 0;
 				}
-				if(wtotal_dist%1000 <= wspeed && coin_show <= 0 && love_show <= 0 && diamond_show <= 0){
+				if(wtotal_dist%50 == 0 && wtotal_dist%300 != 0 && coin_show <= 0 && love_show <= 0 && diamond_show <= 0){
+					srand(time(0));
 					coin_show = SCREEN_WIDTH;
-					coinx = SCREEN_WIDTH + scroll + rand()%200;
+					coinx = SCREEN_WIDTH - scroll - rand()%500;
 					coiny = ground - rand()%50 - 50;
 					coined = 0;
 				}
-				if(wtotal_dist%1500 <= wspeed && love_show <= 0 && diamond_show <= 0){
+				if(wtotal_dist%300 == 0 && love_show <= 0 && diamond_show <= 0){
+					srand(time(0));
 					diamond_show = SCREEN_WIDTH;;
-					diamondx = SCREEN_WIDTH + scroll + rand()%200;
+					diamondx = SCREEN_WIDTH - scroll - rand()%2500;
 					diamondy = ground - rand()%100 - 50;
 					diamonded = 0;
 				}
 				//printf("%d %d\n", pinkmanx, pinkmany);
 
-				if(wtotal_dist%(2*SCREEN_WIDTH) == wspeed){
+				if(wtotal_dist%(2*SCREEN_WIDTH) == 0){
 					wspeed = min(wspeed + 1, 10);
 				}
+				//printf("%d\n", wspeed);
 			}
+
+			if(wtotal_dist%20 == 0) wCurrentScore++;
 
 			SDL_RenderPresent(gRenderer);
 		}

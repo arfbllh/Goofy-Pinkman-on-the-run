@@ -134,6 +134,7 @@ bool loadMedia()
 	success = success & obs[1].loadFromFile("assets/obs/obs1.png");
 	success = success & obs[2].loadFromFile("assets/obs/obs2.png");
 	success = success & obs[3].loadFromFile("assets/obs/obs3.png");
+	success = success & fobs.loadFromFile("assets/obs/obs4.png");
 
 	success = success & stone[1].loadFromFile("assets/obs/stone1.png");
 	success = success & stone[2].loadFromFile("assets/obs/stone2.png");
@@ -176,8 +177,8 @@ bool loadMedia()
 		pName.push_back(PLLS(tscore, name));
 		//cout<<name<<endl;
 	}
-	sort(wName.begin(), wName.end());
-	sort(pName.begin(), pName.end());
+	sort(wName.begin(), wName.end(), fsort);
+	sort(pName.begin(), pName.end(), fsort);
 	f1.close();
 	f2.close();
 
@@ -187,8 +188,10 @@ bool loadMedia()
 	pScoreCard.mHeight = wScoreCard.mHeight = 360;
 
 	success = success & coin.loadFromFile("assets/coin.png");
+	success = success & coinscoretexture.loadFromFile("assets/coin.png");
 	success = success & coin1.loadFromFile("assets/coin1.png");
 	success = success & diamond.loadFromFile("assets/diamond.png");
+	success = success & diamondscoretexture.loadFromFile("assets/diamond.png");
 	success = success & diamond1.loadFromFile("assets/diamond1.png");
 	success = success & love.loadFromFile("assets/love.png");
 	success = success & love1.loadFromFile("assets/love1.png");
@@ -198,6 +201,8 @@ bool loadMedia()
 	diamond1.mWidth = diamond1.mHeight = 50;
 	love.mWidth = love.mHeight = 50;
 	love1.mWidth = love1.mHeight = 50;
+	coinscoretexture.mWidth = coinscoretexture.mHeight = 30;
+	diamondscoretexture.mWidth = diamondscoretexture.mHeight = 30;
 
 	return success;
 }
