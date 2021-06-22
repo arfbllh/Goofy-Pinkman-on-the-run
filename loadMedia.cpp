@@ -42,6 +42,13 @@ bool loadMedia()
 	success = success & pause_button_sh.loadFromFile("assets/button_pause(1).png");
 	success = success & resume_button.loadFromFile("assets/button_resume.png");
 	success = success & resume_button_sh.loadFromFile("assets/button_resume(1).png");
+	success = success & reset_button.loadFromFile("assets/button_reset.jpg");
+	success = success & reset_button_sh.loadFromFile("assets/button_reset(1).jpg");
+	success = success & music_button_sh.loadFromFile("assets/button_music.png");
+	success = success & music_button_sh.loadFromFile("assets/button_music(1).png");
+
+	pause_button.mWidth = pause_button_sh.mWidth = 200;
+	pause_button.mHeight = pause_button_sh.mHeight = 50;
 
 	//music
 
@@ -137,7 +144,7 @@ bool loadMedia()
 	success = success & fobs.loadFromFile("assets/obs/obs4.png");
 
 	fobs.mWidth = 150;
-	fobs.mHeight = 80;
+	fobs.mHeight = 60;
 
 	success = success & stone[1].loadFromFile("assets/obs/stone1.png");
 	success = success & stone[2].loadFromFile("assets/obs/stone2.png");
@@ -206,6 +213,43 @@ bool loadMedia()
 	love1.mWidth = love1.mHeight = 50;
 	coinscoretexture.mWidth = coinscoretexture.mHeight = 30;
 	diamondscoretexture.mWidth = diamondscoretexture.mHeight = 30;
+
+
+
+
+	bg2.loadFromFile("assets/bg2/bg.png");
+	bg2.mWidth = SCREEN_WIDTH;
+	bg2.mHeight = SCREEN_HEIGHT;
+
+
+	success = success & wood1.loadFromFile("assets/obs/wood1.png");
+	success = success & wood2.loadFromFile("assets/obs/wood2.png");
+	success = success & wood3.loadFromFile("assets/obs/wood3.png");
+
+	wood1.mWidth = 600;
+	wood2.mHeight = 200;
+
+	success = success & rotating[0].loadFromFile("assets/rotating/blade_1.png");
+	success = success & rotating[1].loadFromFile("assets/rotating/blade_2.png");
+	success = success & rotating[2].loadFromFile("assets/rotating/blade_3.png");
+	success = success & rotating[3].loadFromFile("assets/rotating/nut.png");
+	success = success & rotating[4].loadFromFile("assets/rotating/long.png");
+	for(int i = 0; i < 4; i++){
+		rotating[i].mWidth = 100;
+		rotating[i].mHeight = 100;
+	}
+	rotating[4].mWidth = 300;
+	rotating[4].mHeight = 50;
+
+
+	success = success & chain[0].loadFromFile("assets/chain/1.png");
+	success = success & chain[1].loadFromFile("assets/chain/5.png");
+	success = success & chain[2].loadFromFile("assets/chain/2.png");
+	success = success & chain[3].loadFromFile("assets/chain/4.png");
+	success = success & chain[4].loadFromFile("assets/chain/3.png");
+	for(int i = 0; i < 5; i++) chain[i].mHeight = 200 + rand()%100;
+
+	for(int i = 0; i < 5; i++) chain[i].mWidth = 40;
 
 	return success;
 }

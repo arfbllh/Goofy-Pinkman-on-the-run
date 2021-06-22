@@ -21,8 +21,9 @@ const int SCREEN_HEIGHT = 720;
 
 int sound = 1;
 int music = 1;
+int pause = 0;
 ll wCurrentScore = 0;
-ll pCurrentScore = 0;
+ll bCurrentScore = 0;
 ll wScore[5];
 ll pScore[5];
 vector<PLLS> wName, pName;
@@ -37,6 +38,25 @@ int scrollingOffset = 0;
 int live;
 int score;
 int scroll = 0;
+
+//bravoos map variable
+int bscreen = 0;
+ll btotal_dist = 0;
+ll bscore = 0;
+int bspeed = 4;
+int fx, fy;
+int bstate = 0;
+int bscroll = 0;
+int blove_show = 0;
+int bcoin_show = 0;
+int bdiamond_show = 0;
+int blovex, blovey, bloved;
+int bcoinx, bcoiny, bcoined;
+int bdiamondx, bdiamondy, bdiamonded;
+int bcoinscroll = 0, bdiamondscroll = 0, blovescroll = 0;
+int bcoin_score = 0, bdiamond_score = 0;
+int blive;
+
 
 
 //Texture wrapper class
@@ -120,7 +140,7 @@ LTexture play_button, play_button_sh, setting_button, setting_button_sh, score_b
 LTexture pause_button, pause_button_sh, resume_button, resume_button_sh;
 LTexture sound_button, on_button, on_button_sh, on_button_on, off_button, off_button_sh, off_button_on, back_button, back_button_sh;
 LTexture life, broken_heart, bravoos_button, bravoos_button_sh, westors_button, westors_button_sh;
-LTexture try_button, try_button_sh, mainmenu_button, mainmenu_button_sh, gameover, input_name0, input_name;
+LTexture try_button, try_button_sh, mainmenu_button, mainmenu_button_sh, gameover, input_name0, input_name, reset_button, reset_button_sh, music_button, music_button_sh;
 LTexture pScoreCard, wScoreCard;
 LTexture coin, diamond, love, coin1, diamond1, love1;
 LTexture coinscoretexture1, diamondscoretexture1;
@@ -134,7 +154,18 @@ SDL_Rect wall_d[5];
 TTF_Font *gFont = NULL;
 LTexture inputtexttexture, nametexture, scoretexture;
 
-SDL_Color textColor = {255, 128, 0, 0xff};
+//spikes
+LTexture rotating[5];
+LTexture chain[5];
+
+
+//bravoos texture
+
+LTexture wood1, wood2, wood3;
+
+SDL_Color textColor = {0, 0, 0, 0};
+
+LTexture bg2;
 
 LTexture::LTexture()
 {
@@ -425,19 +456,21 @@ void pinkman_handleEvent( SDL_Event& e )
     }
 }
 
-void pinkman_move()
+void pinkman_move(int &x, int &y)
 {
     //Move the dot left or right
-    pinkmanx += mVelX;
+    x += mVelX;
+
+    //if(x < 0) x = 0;
 
     //Move the dot up or down
-    pinkmany += mVelY;
+    y += mVelY;
 
     //If the dot collided or went too far up or down
-    if( ( pinkmany < 0 ) || ( pinkmany + pFly[state].getHeight() > SCREEN_HEIGHT ) )
+    if( ( y < 0 ) || ( y + pFly[state].getHeight() > SCREEN_HEIGHT) )
     {
         //Move back
-        pinkmany -= mVelY;
+        y -= mVelY;
     }
 }
 
