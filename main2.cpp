@@ -4,7 +4,8 @@
 
 #define MIN(x, y) (x < y) ? x : y
 #define MAX(x, y) (x > y) ? x : y
-int g = 1;
+
+int g = 1; // gravity
 int ground = 570;
 int current_w_obstacle = 1;
 int reel = 0;
@@ -26,14 +27,8 @@ int x, y;
 double rotate_angle = 0.00;
 
 //
-int id[7], ry[7], rx[7];
-bool bz = 0;
-int bzscroll = 0;
-int st = 0;
-int wallx,  wally;
-int chainx[5], chainy[5];
-int ryr[7];
-int screen_speed = 0;
+
+
 void wbackground(SDL_Event &e)
 {
 
@@ -188,12 +183,16 @@ void bbackground(SDL_Event &e)
 	else pause_button_sh.render(SCREEN_WIDTH - 210, 5);
 
 	
-	srand(time(0));
 	for(int i = 0; i < 7; i++) 
-		if(bzscroll + rx[i] >= 0) 
+		if(bz) 
 			rotating[id[i]].render(bzscroll + rx[i], ry[i], NULL, rotate_angle, NULL, SDL_FLIP_NONE);
 
-	for(int i = 0; i < 5; i++) chain[i].render(bscroll + i*210, -5);
+	if(!bz) {
+		for(int i = 0; i < 7; i++) upper[i].render(chainscroll + i*180 + SCREEN_WIDTH, -5);
+		for(int i = 0; i < 7; i++) lower[i].render(chainscroll + i*180 + SCREEN_WIDTH, SCREEN_HEIGHT - lower[i].mHeight);
+		middle[middle_state].render(chainscroll + middle1x + SCREEN_WIDTH, middle1y);
+		middle[(middle_state+1)%7].render(chainscroll + middle2x + SCREEN_WIDTH, middle2y);
+	}
 
 }
 
@@ -251,10 +250,7 @@ int main()
 				}
 				bstate = floor(bscreen/16);
 				if(mVelX < 0) bstate = 3;
-				bbackground(e);
-
-				pFly[bstate].render(fx, fy);
-
+				
 				bscreen++;
 				if(bscreen == 48) bscreen = 0;
 
@@ -263,7 +259,6 @@ int main()
 				if(btotal_dist%20 == bspeed) bCurrentScore++;
 
 				if(blovescroll >= 1500 && blove_show <= 0){
-					srand(time(0));
 					blove_show = SCREEN_WIDTH;
 					blovex = SCREEN_WIDTH - bscroll - rand()%200;
 					blovey = ground - rand()%150 - 50;
@@ -271,7 +266,6 @@ int main()
 					blovescroll = 0;
 				}
 				if(bcoinscroll >= 600){
-					srand(time(0));
 					bcoin_show = SCREEN_WIDTH;
 					bcoinx = SCREEN_WIDTH - bscroll - rand()%500;
 					bcoiny = ground - rand()%50 - 50;
@@ -279,7 +273,6 @@ int main()
 					bcoinscroll = 0;
 				}
 				if(bdiamondscroll >= 1280){
-					srand(time(0));
 					bdiamond_show = SCREEN_WIDTH;;
 					bdiamondx = SCREEN_WIDTH - bscroll - rand()%500;
 					bdiamondy = ground - rand()%100 - 50;
@@ -310,6 +303,57 @@ int main()
 						fx = fx + 500;
 						break;						
 					}
+				}
+				if(blive == 0)
+				{	
+					on_gameover = 1;
+					on_play = 0;
+					continue;
+				}
+				if(!bz) for(int i = 0; i < 7; i++)
+				{
+					SDL_Rect a = {fx, fy, pFly[state].mWidth, pFly[state].mHeight};
+					SDL_Rect b = {chainscroll + i*180 + SCREEN_WIDTH, -5, upper[i].mWidth, upper[i].mHeight};
+					SDL_Rect c = {chainscroll + i*180 + SCREEN_WIDTH, SCREEN_HEIGHT - lower[i].mHeight, lower[i].mWidth, lower[i].mHeight};
+
+					if(checkCollision(a, b) || checkCollision(a, c)){
+						for(int i = 0; i < 6; i++){
+							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+							SDL_RenderClear(gRenderer);
+							bbackground(e);
+							if(i%2 == 0)broken_heart.render(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2 - 100);
+							SDL_RenderPresent(gRenderer);
+							SDL_Delay(300);
+						}
+						blive--;
+						fx = 200;
+						fy = 200;
+					}
+				}
+				if(blive == 0)
+				{	
+					on_gameover = 1;
+					on_play = 0;
+					continue;
+				}
+
+				SDL_Rect a = {fx, fy, pFly[state].mWidth, pFly[state].mHeight};
+				SDL_Rect b = {chainscroll + middle1x + SCREEN_WIDTH, middle1y, middle[middle_state].mWidth, middle[middle_state].mHeight};
+				SDL_Rect c = {chainscroll + middle2x + SCREEN_WIDTH, middle2y, middle[(middle_state + 1)%7].mWidth, middle[(middle_state + 1)%7].mHeight};
+
+				if(checkCollision(a, b) || checkCollision(a, c)){
+					for(int i = 0; i < 6; i++){
+						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+						SDL_RenderClear(gRenderer);
+						bbackground(e);
+						if(i%2 == 0)broken_heart.render(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2 - 100);
+						SDL_RenderPresent(gRenderer);
+						SDL_Delay(300);
+					}
+					blive--;
+					fx = 200;
+					fy = 200;
+					break;						
 				}
 
 				if(blive == 0)
@@ -351,10 +395,14 @@ int main()
 					bdiamond_show -= bspeed;
 				}
 
-				if(btotal_dist%SCREEN_WIDTH == bspeed){
-					bz ^= 1;
-					if(bz){
+				if(!bz) 
+				{
+
+					chainscroll -= bspeed;
+
+					if(chainscroll < -SCREEN_WIDTH - 1000){
 						bzscroll = 0;
+						bz = 1;
 						st++;
 						if(st == 7) st = 0;
 						for(int i = 0; i < 7; i++) {
@@ -371,15 +419,18 @@ int main()
 						ry[6] = 720;
 						screen_speed = 0;
 					}
-					else {
-						wallx = SCREEN_WIDTH;
-						wally = 300 + rand()%90;
-						screen_speed = bspeed;
-						for(int i = 0; i < 5; i++) chain[i].mHeight = 200 + rand()%100;
-					}
 				}
-				else {
-					if(bz){
+				else
+				{
+
+					bzscroll -= bspeed;
+					bool tmp = 0;
+					for(int i = 0; i < 7; i++) if(bzscroll + rotating[id[i]].mWidth > -SCREEN_WIDTH) tmp |= 1;
+					if(tmp == 0) bz = 0;
+
+					if(bz)
+					{
+
 						for(int i = 0; i < 7; i++) if(id[i] != 4){
 	
 							if(ryr[i]){
@@ -400,8 +451,22 @@ int main()
 
 						//printf("%d\n", bzscroll + rx);
 					}
-					bzscroll -= bspeed;
+					else {
+
+						chainscroll = 0;
+						middle_state++;
+						if(middle_state == 7) middle_state = 0;
+						middle1x = 200 + rand()%50;
+						middle1y = 200 + rand()%50;
+						middle2x = middle1x + middle[middle_state].mWidth + 100 + rand()%100;
+						middle2y = 200 + rand()%50;
+					}
 				}
+
+				bbackground(e);
+
+				pFly[bstate].render(fx, fy);
+
 				rotate_angle += 10;
 				if(rotate_angle == 360) rotate_angle = 0;
 				SDL_RenderPresent(gRenderer);
@@ -447,7 +512,7 @@ int main()
 				//checking jump
 				if(keystates[SDL_SCANCODE_RETURN] || keystates[SDL_SCANCODE_J]) {
 					//give a jump
-					int y[9] = {257, 287, 317, 337, 337, 300, 287, 257, 257};
+					int y[9] = {287, 317, 347, 377, 377, 330, 317, 287, 287};
 					for(int i = 0; i < 9; i++){
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 						SDL_RenderClear(gRenderer);
@@ -639,7 +704,6 @@ int main()
 				//coin, diamond, love controller
 				
 				if(lovescroll >= 1500 && love_show <= 0){
-					srand(time(0));
 					love_show = SCREEN_WIDTH;
 					lovex = SCREEN_WIDTH - scroll - rand()%200;
 					lovey = ground - rand()%150 - 50;
@@ -647,7 +711,6 @@ int main()
 					lovescroll = 0;
 				}
 				if(coinscroll >= 600){
-					srand(time(0));
 					coin_show = SCREEN_WIDTH;
 					coinx = SCREEN_WIDTH - scroll - rand()%500;
 					coiny = ground - rand()%50 - 50;
@@ -655,7 +718,6 @@ int main()
 					coinscroll = 0;
 				}
 				if(diamondscroll >= 1280){
-					srand(time(0));
 					diamond_show = SCREEN_WIDTH;;
 					diamondx = SCREEN_WIDTH - scroll - rand()%500;
 					diamondy = ground - rand()%100 - 50;
@@ -664,7 +726,7 @@ int main()
 				}
 				if(fobsscroll >= 1500){
 					fobs_show = SCREEN_WIDTH;
-					fobsx = SCREEN_WIDTH - scroll;
+					fobsx = SCREEN_WIDTH - scroll - 200;
 					fobsy = 0;
 					fobsscroll = 0;
 				}

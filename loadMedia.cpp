@@ -242,14 +242,43 @@ bool loadMedia()
 	rotating[4].mHeight = 50;
 
 
-	success = success & chain[0].loadFromFile("assets/chain/1.png");
-	success = success & chain[1].loadFromFile("assets/chain/5.png");
-	success = success & chain[2].loadFromFile("assets/chain/2.png");
-	success = success & chain[3].loadFromFile("assets/chain/4.png");
-	success = success & chain[4].loadFromFile("assets/chain/3.png");
-	for(int i = 0; i < 5; i++) chain[i].mHeight = 200 + rand()%100;
+	success = success & lower[0].loadFromFile("assets/b_lower/1.png");
+	success = success & lower[1].loadFromFile("assets/b_lower/5.png");
+	success = success & lower[2].loadFromFile("assets/b_lower/2.png");
+	success = success & lower[3].loadFromFile("assets/b_lower/3.png");
+	success = success & lower[4].loadFromFile("assets/b_lower/4.png");
+	success = success & lower[5].loadFromFile("assets/b_lower/7.png");
+	success = success & lower[6].loadFromFile("assets/b_lower/6.png");
 
-	for(int i = 0; i < 5; i++) chain[i].mWidth = 40;
+	success = success & middle[0].loadFromFile("assets/b_middle/1.png");
+	success = success & middle[1].loadFromFile("assets/b_middle/5.png");
+	success = success & middle[2].loadFromFile("assets/b_middle/2.png");
+	success = success & middle[3].loadFromFile("assets/b_middle/3.png");
+	success = success & middle[4].loadFromFile("assets/b_middle/4.png");
+	success = success & middle[5].loadFromFile("assets/b_middle/7.png");
+	success = success & middle[6].loadFromFile("assets/b_middle/6.png");
+
+	success = success & upper[0].loadFromFile("assets/b_upper/1.png");
+	success = success & upper[1].loadFromFile("assets/b_upper/5.png");
+	success = success & upper[2].loadFromFile("assets/b_upper/2.png");
+	success = success & upper[3].loadFromFile("assets/b_upper/3.png");
+	success = success & upper[4].loadFromFile("assets/b_upper/4.png");
+	success = success & upper[5].loadFromFile("assets/b_upper/7.png");
+	success = success & upper[6].loadFromFile("assets/b_upper/6.png");
+
+
+	for(int i = 0; i < 7; i++) {
+		upper[i].mWidth = 50;
+		upper[i].mHeight = 100 + rand()%50;
+	}
+	// for(int i = 0; i < 7; i++) {
+	// 	middle[i].mWidth = 400;
+	// 	middle[i].mHeight = 150 + rand()%50;
+	// }
+	for(int i = 0; i < 7; i++) {
+		lower[i].mWidth = 80;
+		lower[i].mHeight = 100 + rand()%100;
+	}
 
 	return success;
 }

@@ -23,13 +23,18 @@ int sound = 1;
 int music = 1;
 int pause = 0;
 ll wCurrentScore = 0;
-ll bCurrentScore = 0;
+
 ll wScore[5];
-ll pScore[5];
+
 vector<PLLS> wName, pName;
 string inputtext = "";
 
-int pinkmanx = 0, pinkmany = 0, vel = 10, mVelX= 0, mVelY = 0, state = 0;
+int pinkmanx = 0;
+int pinkmany = 0;
+int vel = 10;
+int mVelX= 0;
+int mVelY = 0;
+int state = 0;
 
 double width_ratio, heigt_ratio;
 
@@ -42,6 +47,8 @@ int scroll = 0;
 //bravoos map variable
 int bscreen = 0;
 ll btotal_dist = 0;
+ll bCurrentScore = 0;
+ll pScore[5];
 ll bscore = 0;
 int bspeed = 4;
 int fx, fy;
@@ -56,6 +63,18 @@ int bdiamondx, bdiamondy, bdiamonded;
 int bcoinscroll = 0, bdiamondscroll = 0, blovescroll = 0;
 int bcoin_score = 0, bdiamond_score = 0;
 int blive;
+int id[7], ry[7], rx[7];
+bool bz = 0;
+int bzscroll = 0;
+int st = 0;
+int chainx[5], chainy[5];
+int ryr[7];
+int screen_speed = bspeed;
+int second = 0;
+int chainscroll = 0;
+int middle1x = 300, middle1y = 300, middle_state = 0;
+int middle2x = 600, middle2y = 300;
+
 
 
 
@@ -104,13 +123,11 @@ class LTexture
 
 //Starts up SDL and creates window
 bool init();
-
 //Loads media
-
+bool loadMedia();
 //Frees media and shuts down SDL
 void close();
-
-
+//chek collision between two rectangle
 bool checkCollision( SDL_Rect a, SDL_Rect b );
 
 //The window we'll be rendering to
@@ -149,14 +166,14 @@ LTexture fobs;
 LTexture obs[10];
 LTexture stone[5];
 
-SDL_Rect wall_u[5];
-SDL_Rect wall_d[5];
 TTF_Font *gFont = NULL;
 LTexture inputtexttexture, nametexture, scoretexture;
 
 //spikes
 LTexture rotating[5];
-LTexture chain[5];
+LTexture upper[7];
+LTexture lower[7];
+LTexture middle[7];
 
 
 //bravoos texture
@@ -320,6 +337,8 @@ bool init()
 {
 	//Initialization flag
 	bool success = true;
+
+	srand(time(NULL));
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )

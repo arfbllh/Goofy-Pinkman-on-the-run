@@ -247,8 +247,9 @@ void show_menu_otherscreen(SDL_Event e)
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 
-		sound_button.render(buttonx, play_buttony);
-		if(over_button(x, y, buttonx, play_buttony + 100, button_width, button_height)){
+		sound_button.render(buttonx, play_buttony - 100);
+
+		if(over_button(x, y, buttonx, play_buttony, button_width, button_height)){
 			SDL_Delay(25);
 			on_shadow = 1;
 			off_shodow = 0;
@@ -262,7 +263,7 @@ void show_menu_otherscreen(SDL_Event e)
 				SDL_Delay(50);
 			}
 		}
-		else if(over_button(x, y, buttonx, play_buttony + 200, button_width, button_height)){
+		else if(over_button(x, y, buttonx, play_buttony + 100, button_width, button_height)){
 			SDL_Delay(25);
 			on_shadow = 0;
 			off_shodow = 1;
@@ -276,7 +277,7 @@ void show_menu_otherscreen(SDL_Event e)
 				SDL_Delay(50);
 			}
 		}
-		else if(over_button(x, y, buttonx, play_buttony + 350, button_width, button_height)){
+		else if(over_button(x, y, buttonx, play_buttony + 250, button_width, button_height)){
 			SDL_Delay(25);
 			on_shadow = 0;
 			off_shodow = 0;
@@ -298,14 +299,15 @@ void show_menu_otherscreen(SDL_Event e)
 		}
 
 		//if(on_shadow) on_button_sh.render(buttonx, play_buttony + 100);
-		 if(sound) on_button_on.render(buttonx, play_buttony + 100);
-		else on_button.render(buttonx, play_buttony + 100);
+		 if(sound) on_button_on.render(buttonx, play_buttony);
+		else on_button.render(buttonx, play_buttony);
 
 		//if(off_shodow) off_button_sh.render(buttonx, play_buttony + 200);
-		 if(sound) off_button.render(buttonx, play_buttony + 200);
-		else off_button_on.render(buttonx, play_buttony + 200);
+		 if(sound) off_button.render(buttonx, play_buttony + 100);
+		else off_button_on.render(buttonx, play_buttony + 100);
 
-		back_button.render(buttonx, play_buttony + 350);
+		if(!back_shadow) back_button.render(buttonx, play_buttony + 250);
+		else  back_button_sh.render(buttonx, play_buttony + 250);
 		SDL_RenderPresent(gRenderer);
 	}
 	else if(on_help)
