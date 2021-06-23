@@ -5,29 +5,6 @@
 #define MIN(x, y) (x < y) ? x : y
 #define MAX(x, y) (x > y) ? x : y
 
-int g = 1; // gravity
-int ground = 570;
-int current_w_obstacle = 1;
-int reel = 0;
-int p = 0;
-int obsx = 1800;
-int obsy;
-int stonex = 200;
-int stones = 1;
-ll wtotal_dist = 0;
-int love_show = 0;
-int diamond_show = 0;
-int coin_show = 0;
-int lovex, lovey, loved, coinx, coiny, coined, diamondx, diamondy, diamonded;
-int coinscroll = 0, diamondscroll = 0, lovescroll = 0, fobsscroll = 0;
-int coin_score = 0, diamond_score = 0;
-int wspeed = 2;
-int fobsx, fobsy, fobs_show = 1;
-int x, y;
-double rotate_angle = 0.00;
-
-//
-
 
 void wbackground(SDL_Event &e)
 {
@@ -247,6 +224,8 @@ int main()
 				bscroll -= screen_speed;
 				if(bscroll < -SCREEN_WIDTH){
 					bscroll = 0;
+					reel++;
+					if(reel%2 == 0) bspeed = min(bspeed + 1, 6);
 				}
 				bstate = floor(bscreen/16);
 				if(mVelX < 0) bstate = 3;
@@ -256,7 +235,10 @@ int main()
 
 				btotal_dist += bspeed;
 
+
 				if(btotal_dist%20 == bspeed) bCurrentScore++;
+
+
 
 				if(blovescroll >= 1500 && blove_show <= 0){
 					blove_show = SCREEN_WIDTH;
@@ -287,10 +269,11 @@ int main()
 
 				if(bz) for(int i = 0; i < 7; i++)
 				{
-					SDL_Rect a = {fx, fy, pFly[state].mWidth, pFly[state].mHeight};
+					SDL_Rect a = {fx, fy, pFly[state].mWidth - 5, pFly[state].mHeight - 5};
 					SDL_Rect b = {rx[i] + bzscroll, ry[i], rotating[id[i]].mWidth, rotating[id[i]].mHeight};
 
 					if(checkCollision(a, b)){
+						if(sound) Mix_PlayChannel(-1, gSpike, 0);
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 							SDL_RenderClear(gRenderer);
@@ -312,11 +295,12 @@ int main()
 				}
 				if(!bz) for(int i = 0; i < 7; i++)
 				{
-					SDL_Rect a = {fx, fy, pFly[state].mWidth, pFly[state].mHeight};
+					SDL_Rect a = {fx, fy, pFly[state].mWidth - 5, pFly[state].mHeight - 5};
 					SDL_Rect b = {chainscroll + i*180 + SCREEN_WIDTH, -5, upper[i].mWidth, upper[i].mHeight};
 					SDL_Rect c = {chainscroll + i*180 + SCREEN_WIDTH, SCREEN_HEIGHT - lower[i].mHeight, lower[i].mWidth, lower[i].mHeight};
 
 					if(checkCollision(a, b) || checkCollision(a, c)){
+						if(sound) Mix_PlayChannel(-1, gObs, 0);
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 							SDL_RenderClear(gRenderer);
@@ -337,11 +321,12 @@ int main()
 					continue;
 				}
 
-				SDL_Rect a = {fx, fy, pFly[state].mWidth, pFly[state].mHeight};
+				SDL_Rect a = {fx, fy, pFly[state].mWidth - 5, pFly[state].mHeight - 5};
 				SDL_Rect b = {chainscroll + middle1x + SCREEN_WIDTH, middle1y, middle[middle_state].mWidth, middle[middle_state].mHeight};
 				SDL_Rect c = {chainscroll + middle2x + SCREEN_WIDTH, middle2y, middle[(middle_state + 1)%7].mWidth, middle[(middle_state + 1)%7].mHeight};
 
 				if(checkCollision(a, b) || checkCollision(a, c)){
+					if(sound) Mix_PlayChannel(-1, gObs, 0);
 					for(int i = 0; i < 6; i++){
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 						SDL_RenderClear(gRenderer);
@@ -352,8 +337,7 @@ int main()
 					}
 					blive--;
 					fx = 200;
-					fy = 200;
-					break;						
+					fy = 200;		
 				}
 
 				if(blive == 0)
@@ -368,6 +352,7 @@ int main()
 					SDL_Rect a = {fx, fy, pFly[bstate].mWidth, pFly[bstate].mHeight};
 					SDL_Rect loverect = {blovex + bscroll, blovey, love.mWidth, love.mHeight};
 					if(checkCollision(a, loverect)){
+						if(sound) Mix_PlayChannel(-1, gLove, 0);
 						if(blive < 3) blive++;
 						bloved = 1;
 					}
@@ -377,6 +362,7 @@ int main()
 					SDL_Rect a = {fx, fy, pFly[bstate].mWidth, pFly[bstate].mHeight};
 					SDL_Rect coinrect = {bcoinx + bscroll, bcoiny, coin.mWidth, coin.mHeight};
 					if(checkCollision(a, coinrect)){
+						if(sound) Mix_PlayChannel(-1, gCoin, 0);
 						bCurrentScore += 10;
 						bcoin_score++;
 						bcoined = 1;
@@ -388,6 +374,7 @@ int main()
 					SDL_Rect a = {fx, fy, pFly[bstate].mWidth, pFly[bstate].mHeight};
 					SDL_Rect drect = {bdiamondx + bscroll, bdiamondy, diamond.mWidth, diamond.mHeight};
 					if(checkCollision(a, drect)){
+						if(sound) Mix_PlayChannel(-1, gDiamond, 0);
 						bdiamonded = 1;
 						bCurrentScore += 100;
 						bdiamond_score++;
@@ -448,6 +435,7 @@ int main()
 								}
 							}
 						}
+						screen_speed = bspeed;
 
 						//printf("%d\n", bzscroll + rx);
 					}
@@ -512,6 +500,7 @@ int main()
 				//checking jump
 				if(keystates[SDL_SCANCODE_RETURN] || keystates[SDL_SCANCODE_J]) {
 					//give a jump
+					if(sound) Mix_PlayChannel(-1, gJump, 0);
 					int y[9] = {287, 317, 347, 377, 377, 330, 317, 287, 287};
 					for(int i = 0; i < 9; i++){
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -528,7 +517,22 @@ int main()
 						SDL_Rect f = {-1, -1, 0, 0};
 						if(fobs_show > 0) f = {fobsx + scroll, fobsy, fobs.mWidth, fobs.mHeight};
 
-						if(checkCollision(pink, b) || checkCollision(pink, c) ||  checkCollision(pink, f)){
+						bool die = 0;
+
+						if(checkCollision(pink, b)){
+							if(sound) Mix_PlayChannel(-1, gWater, 0);
+							die = 1;
+						}
+						if(checkCollision(pink, c)){
+							if(sound) Mix_PlayChannel(-1, gObs, 0);
+							die = 1;
+						}
+						if(checkCollision(pink, f)){
+							if(sound) Mix_PlayChannel(-1, gSpike, 0);
+							die = 1;
+						}
+
+						if(die){
 							for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 							SDL_RenderClear(gRenderer);
@@ -550,7 +554,9 @@ int main()
 						if(love_show > 0 && !loved){
 							SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 							SDL_Rect loverect = {lovex + scroll, lovey, love.mWidth, love.mHeight};
-							if(checkCollision(a, loverect)){
+							if(checkCollision(a, loverect))
+							{
+								if(sound) Mix_PlayChannel(-1, gLove, 0);
 								if(live < 3) live++;
 								loved = 1;
 							}
@@ -559,7 +565,9 @@ int main()
 						if(coin_show > 0 && !coined){
 							SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 							SDL_Rect coinrect = {coinx + scroll, coiny, coin.mWidth, coin.mHeight};
-							if(checkCollision(a, coinrect)){
+							if(checkCollision(a, coinrect))
+							{
+								if(sound) Mix_PlayChannel(-1, gCoin, 0);
 								score += 10;
 								coin_score++;
 								coined = 1;
@@ -569,7 +577,9 @@ int main()
 						if(diamond_show > 0 && !diamonded){
 							SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 							SDL_Rect drect = {diamondx + scroll, diamondy, diamond.mWidth, diamond.mHeight};
-							if(checkCollision(a, drect)){
+							if(checkCollision(a, drect))
+							{
+								if(sound) Mix_PlayChannel(-1, gDiamond, 0);
 								diamonded = 1;
 								score += 100;
 								diamond_score++;
@@ -614,13 +624,30 @@ int main()
 					pRun[state].render(pinkmanx, pinkmany, NULL, NULL, NULL, flip);
 
 					
-					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
+					SDL_Rect pink = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 					SDL_Rect b = {scroll + SCREEN_WIDTH + 515, SCREEN_HEIGHT - 150 + 50, water2.mWidth, water2.mHeight};
 					SDL_Rect c = {-obsx + scroll + 2*SCREEN_WIDTH, obsy, obs[current_w_obstacle].mWidth, obs[current_w_obstacle].mHeight};
 					SDL_Rect d = {-stonex + scroll + 2*SCREEN_WIDTH, 570 - stone[stones].mHeight, stone[stones].mWidth, stone[stones].mHeight};
 					SDL_Rect f = {0, 0, 0, 0};
 					if(fobs_show > 0) f = {fobsx + scroll, fobsy, fobs.mWidth, fobs.mHeight};
-					if(checkCollision(a, b) || checkCollision(a, c) || checkCollision(a, d) || checkCollision(a, f)){
+					bool die = 0;
+					if(checkCollision(pink, b)){
+						if(sound) Mix_PlayChannel(-1, gWater, 0);
+						die = 1;
+					}
+					if(checkCollision(pink, c)){
+						if(sound) Mix_PlayChannel(-1, gObs, 0);
+						die = 1;
+					}
+					if(checkCollision(pink, d)){
+						if(sound) Mix_PlayChannel(-1, gStone, 0);
+						die = 1;
+					}
+					if(checkCollision(pink, f)){
+						if(sound) Mix_PlayChannel(-1, gSpike, 0);
+						die = 1;
+					}
+					if(die){
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 							SDL_RenderClear(gRenderer);
@@ -651,7 +678,9 @@ int main()
 				if(love_show > 0 && !loved){
 					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 					SDL_Rect loverect = {lovex + scroll, lovey, love.mWidth, love.mHeight};
-					if(checkCollision(a, loverect)){
+					if(checkCollision(a, loverect))
+					{
+						if(sound) Mix_PlayChannel(-1, gLove, 0);
 						if(live < 3) live++;
 						loved = 1;
 					}
@@ -660,7 +689,9 @@ int main()
 				if(coin_show > 0 && !coined){
 					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 					SDL_Rect coinrect = {coinx + scroll, coiny, coin.mWidth, coin.mHeight};
-					if(checkCollision(a, coinrect)){
+					if(checkCollision(a, coinrect))
+					{
+						if(sound) Mix_PlayChannel(-1, gCoin, 0);
 						score += 10;
 						coin_score++;
 						coined = 1;
@@ -670,7 +701,9 @@ int main()
 				if(diamond_show > 0 && !diamonded){
 					SDL_Rect a = {pinkmanx, pinkmany, pRun[state].mWidth, pRun[state].mHeight};
 					SDL_Rect drect = {diamondx + scroll, diamondy, diamond.mWidth, diamond.mHeight};
-					if(checkCollision(a, drect)){
+					if(checkCollision(a, drect))
+					{
+						if(sound) Mix_PlayChannel(-1, gDiamond, 0);
 						diamonded = 1;
 						score += 100;
 						diamond_score++;

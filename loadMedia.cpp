@@ -14,38 +14,38 @@ bool loadMedia()
 		success = 0;
 	}
 	//map
-	success = success & westors_button.loadFromFile("assets/westors.png");
-	success = success & westors_button_sh.loadFromFile("assets/westors1.png");
-	success = success & bravoos_button.loadFromFile("assets/bravoos.png");
-	success = success & bravoos_button_sh.loadFromFile("assets/bravoos1.png");
+	success = success & westors_button.loadFromFile("assets/buttons/westors.png");
+	success = success & westors_button_sh.loadFromFile("assets/buttons/westors1.png");
+	success = success & bravoos_button.loadFromFile("assets/buttons/bravoos.png");
+	success = success & bravoos_button_sh.loadFromFile("assets/buttons/bravoos1.png");
 	//menu meadia loading
-	success = success & play_button.loadFromFile("assets/button_play.png");
-	success = success & play_button_sh.loadFromFile("assets/button_play(2).png");
-	success = success & setting_button.loadFromFile("assets/button_settings.png");
-	success = success & setting_button_sh.loadFromFile("assets/button_settings(2).png");
-	success = success &	help_button.loadFromFile("assets/button_help.png");
-	success = success &	help_button_sh.loadFromFile("assets/button_help(2).png");
-	success = success &	score_button.loadFromFile("assets/button_score.png");
-	success = success &	score_button_sh.loadFromFile("assets/button_score(2).png");
-	success = success &	quit_button.loadFromFile("assets/button_quit.png");
-	success = success & quit_button_sh.loadFromFile("assets/button_quit(2).png");
-	success = success & sound_button.loadFromFile("assets/button_sound.png");
-	success = success & on_button.loadFromFile("assets/button_on.png");
-	success = success & on_button_sh.loadFromFile("assets/button_on(2).png");
-	success = success & on_button_on.loadFromFile("assets/button_on(3).png");
-	success = success & off_button.loadFromFile("assets/button_off.png");
-	success = success & off_button_sh.loadFromFile("assets/button_off(2).png");
-	success = success & off_button_on.loadFromFile("assets/button_off(3).png");
-	success = success & back_button.loadFromFile("assets/button_back.png");
-	success = success & back_button_sh.loadFromFile("assets/button_back(1).png");
-	success = success & pause_button.loadFromFile("assets/button_pause.png");
-	success = success & pause_button_sh.loadFromFile("assets/button_pause(1).png");
-	success = success & resume_button.loadFromFile("assets/button_resume.png");
-	success = success & resume_button_sh.loadFromFile("assets/button_resume(1).png");
-	success = success & reset_button.loadFromFile("assets/button_reset.jpg");
-	success = success & reset_button_sh.loadFromFile("assets/button_reset(1).jpg");
-	success = success & music_button_sh.loadFromFile("assets/button_music.png");
-	success = success & music_button_sh.loadFromFile("assets/button_music(1).png");
+	success = success & play_button.loadFromFile("assets/buttons/button_play.png");
+	success = success & play_button_sh.loadFromFile("assets/buttons/button_play(2).png");
+	success = success & setting_button.loadFromFile("assets/buttons/button_settings.png");
+	success = success & setting_button_sh.loadFromFile("assets/buttons/button_settings(2).png");
+	success = success &	help_button.loadFromFile("assets/buttons/button_help.png");
+	success = success &	help_button_sh.loadFromFile("assets/buttons/button_help(2).png");
+	success = success &	score_button.loadFromFile("assets/buttons/button_score.png");
+	success = success &	score_button_sh.loadFromFile("assets/buttons/button_score(2).png");
+	success = success &	quit_button.loadFromFile("assets/buttons/button_quit.png");
+	success = success & quit_button_sh.loadFromFile("assets/buttons/button_quit(2).png");
+	success = success & sound_button.loadFromFile("assets/buttons/button_sound.png");
+	success = success & on_button.loadFromFile("assets/buttons/button_on.png");
+	success = success & on_button_sh.loadFromFile("assets/buttons/button_on(2).png");
+	success = success & on_button_on.loadFromFile("assets/buttons/button_on(3).png");
+	success = success & off_button.loadFromFile("assets/buttons/button_off.png");
+	success = success & off_button_sh.loadFromFile("assets/buttons/button_off(2).png");
+	success = success & off_button_on.loadFromFile("assets/buttons/button_off(3).png");
+	success = success & back_button.loadFromFile("assets/buttons/button_back.png");
+	success = success & back_button_sh.loadFromFile("assets/buttons/button_back(1).png");
+	success = success & pause_button.loadFromFile("assets/buttons/button_pause.png");
+	success = success & pause_button_sh.loadFromFile("assets/buttons/button_pause(1).png");
+	success = success & resume_button.loadFromFile("assets/buttons/button_resume.png");
+	success = success & resume_button_sh.loadFromFile("assets/buttons/button_resume(1).png");
+	success = success & reset_button.loadFromFile("assets/buttons/button_reset.png");
+	success = success & reset_button_sh.loadFromFile("assets/buttons/button_reset(1).png");
+	success = success & music_button_sh.loadFromFile("assets/buttons/button_music.png");
+	success = success & music_button_sh.loadFromFile("assets/buttons/button_music(1).png");
 
 	pause_button.mWidth = pause_button_sh.mWidth = 200;
 	pause_button.mHeight = pause_button_sh.mHeight = 50;
@@ -54,6 +54,17 @@ bool loadMedia()
 
 	success = success & ((gHelp = Mix_LoadMUS("assets/help.mp3")) != NULL);
 	success = success & ((gClick = Mix_LoadWAV("assets/click.wav")) != NULL);
+	success = success & ((gCoin = Mix_LoadWAV("assets/sounds/coin.wav")) != NULL);
+	success = success & ((gDiamond = Mix_LoadWAV("assets/sounds/diamond.wav")) != NULL);
+	success = success & ((gLove = Mix_LoadWAV("assets/sounds/love.wav")) != NULL);
+	success = success & ((gWater = Mix_LoadWAV("assets/sounds/water.wav")) != NULL);
+	success = success & ((gJump = Mix_LoadWAV("assets/sounds/jump.wav")) != NULL);
+	success = success & ((gSpike = Mix_LoadWAV("assets/sounds/cutter.wav")) != NULL);
+	success = success & ((gStone = Mix_LoadWAV("assets/sounds/stone.wav")) != NULL);
+	success = success & ((gLive = Mix_LoadWAV("assets/sounds/live.wav")) != NULL);
+	success = success & ((gObs = Mix_LoadWAV("assets/sounds/obs.wav")) != NULL);
+	success = success & ((gMenu = Mix_LoadMUS("assets/sounds/menu.wav")) != NULL);
+	success = success & ((gPlayw = Mix_LoadMUS("assets/sounds/playw.mp3")) != NULL);
 
 
 	//character
@@ -122,10 +133,10 @@ bool loadMedia()
 	broken_heart.mHeight = 200;
 
 
-	success = success & try_button.loadFromFile("assets/button_try.png");
-	success = success & try_button_sh.loadFromFile("assets/button_try(1).png");
-	success = success & mainmenu_button.loadFromFile("assets/button_mainmenu.png");
-	success = success &	mainmenu_button_sh.loadFromFile("assets/button_mainmenu(1).png");
+	success = success & try_button.loadFromFile("assets/buttons/button_try.png");
+	success = success & try_button_sh.loadFromFile("assets/buttons/button_try(1).png");
+	success = success & mainmenu_button.loadFromFile("assets/buttons/button_mainmenu.png");
+	success = success &	mainmenu_button_sh.loadFromFile("assets/buttons/button_mainmenu(1).png");
 	success = success & gameover.loadFromFile("assets/gameover.png");
 	success = success & input_name0.loadFromFile("assets/input_name0.png");
 	success = success & input_name.loadFromFile("assets/input_name.png");
@@ -191,7 +202,6 @@ bool loadMedia()
 	sort(pName.begin(), pName.end(), fsort);
 	f1.close();
 	f2.close();
-
 
 	success = success & pScoreCard.loadFromFile("assets/pscore.png");
 	success = success & wScoreCard.loadFromFile("assets/wscore.png");

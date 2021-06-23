@@ -45,8 +45,12 @@ bool pbravoos = 0;
 bool pwestors = 0;
 bool pause_shadow = 0;
 bool start = 0;
-
-
+int menu_music = 1;
+int gameover_music = 1;
+int off_shodow1 = 1;
+int on_shadow1 = 0;
+int off_on1 = 0;
+int on_on1 = 1;
 
 bool over_button(int mouse_x,int mouse_y, int button_x, int button_y, int button_width, int button_height)
 {
@@ -58,6 +62,8 @@ bool over_button(int mouse_x,int mouse_y, int button_x, int button_y, int button
 void show_menu_otherscreen(SDL_Event e)
 {
 	int x, y;
+	if(music && menu_music) Mix_PlayMusic(gMenu, -1);
+	menu_music = 0;
 	if(on_menu)
 	{
 		if(pause && !pause_shadow) resume_button.render(buttonx, play_buttony);
@@ -107,10 +113,8 @@ void show_menu_otherscreen(SDL_Event e)
 			help_shadow = 0;
 			score_shadow = 0;
 			quit_shadow = 0;
-			//on_select_map = 1;
 			pause_shadow = 0;
 			if(e.type == SDL_MOUSEBUTTONDOWN){
-				
 				on_select_map = 1;
 				pause = 0;
 				on_setting = 0;
@@ -118,6 +122,9 @@ void show_menu_otherscreen(SDL_Event e)
 				on_score = 0;
 				on_quit = 0;
 				on_menu = 0;
+				pause = 0;
+				pbravoos = 0;
+				pwestors = 0;
 				e.type = SDL_MULTIGESTURE;
 				e.key.repeat = 0;
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
@@ -247,14 +254,16 @@ void show_menu_otherscreen(SDL_Event e)
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 
-		sound_button.render(buttonx, play_buttony - 100);
+		sound_button.render(buttonx - 180, play_buttony - 100);
+		music_button.render(buttonx + 18, play_buttony - 100);
 
-		if(over_button(x, y, buttonx, play_buttony, button_width, button_height)){
+		if(over_button(x, y, buttonx - 180, play_buttony, button_width, button_height)){
 			SDL_Delay(25);
 			on_shadow = 1;
 			off_shodow = 0;
-			back_shadow = 1;
-
+			back_shadow = 0;
+			off_shodow1 = 0;
+			on_shadow1 = 0;
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
@@ -263,11 +272,13 @@ void show_menu_otherscreen(SDL_Event e)
 				SDL_Delay(50);
 			}
 		}
-		else if(over_button(x, y, buttonx, play_buttony + 100, button_width, button_height)){
+		else if(over_button(x, y, buttonx - 180, play_buttony + 100, button_width, button_height)){
 			SDL_Delay(25);
 			on_shadow = 0;
 			off_shodow = 1;
-			back_shadow = 1;
+			back_shadow = 0;
+			off_shodow1 = 0;
+			on_shadow1 = 0;
 
 			if(e.type == SDL_MOUSEBUTTONDOWN ){
 
@@ -277,11 +288,13 @@ void show_menu_otherscreen(SDL_Event e)
 				SDL_Delay(50);
 			}
 		}
-		else if(over_button(x, y, buttonx, play_buttony + 250, button_width, button_height)){
+		else if(over_button(x, y, buttonx - 180, play_buttony + 250, button_width, button_height)){
 			SDL_Delay(25);
 			on_shadow = 0;
 			off_shodow = 0;
 			back_shadow = 1;
+			off_shodow1 = 0;
+			on_shadow1 = 0;
 
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 
@@ -291,20 +304,64 @@ void show_menu_otherscreen(SDL_Event e)
 				SDL_Delay(100);
 			}
 		}
+		else if(over_button(x, y, buttonx + 180, play_buttony, button_width, button_height)){
+			SDL_Delay(25);
+			on_shadow = 0;
+			off_shodow = 0;
+			back_shadow = 0;
+			off_shodow1 = 0;
+			on_shadow1 = 1;
+
+			if(e.type == SDL_MOUSEBUTTONDOWN){
+
+				if(sound) Mix_PlayChannel(-1, gClick, 0);
+				menu_music = 1;
+				music = 1;
+				on_on1 = 1;
+				SDL_Delay(50);
+			}
+		}
+		else if(over_button(x, y, buttonx + 180, play_buttony + 100, button_width, button_height)){
+			SDL_Delay(25);
+			on_shadow = 0;
+			off_shodow = 0;
+			back_shadow = 0;
+			off_shodow1 = 1;
+			on_shadow1 = 0;
+
+			if(e.type == SDL_MOUSEBUTTONDOWN ){
+
+				if(sound) Mix_PlayChannel(-1, gClick, 0);
+				music = 0;
+				off_on1 = 1;
+				Mix_HaltMusic();
+				SDL_Delay(50);
+			}
+		}
 		else{
 			on_shadow = 0;
 			off_shodow = 0;
 			back_shadow = 0;
+			on_shadow1 = 0;
+			off_shodow1 = 0;
 
 		}
 
 		//if(on_shadow) on_button_sh.render(buttonx, play_buttony + 100);
-		 if(sound) on_button_on.render(buttonx, play_buttony);
-		else on_button.render(buttonx, play_buttony);
+		 if(sound) on_button_on.render(buttonx - 180, play_buttony);
+		else on_button.render(buttonx - 180, play_buttony);
 
 		//if(off_shodow) off_button_sh.render(buttonx, play_buttony + 200);
-		 if(sound) off_button.render(buttonx, play_buttony + 100);
-		else off_button_on.render(buttonx, play_buttony + 100);
+		 if(sound) off_button.render(buttonx - 180, play_buttony + 100);
+		else off_button_on.render(buttonx - 180, play_buttony + 100);
+
+		//if(on_shadow) on_button_sh.render(buttonx, play_buttony + 100);
+		 if(music) on_button_on.render(buttonx + 180, play_buttony);
+		else on_button.render(buttonx + 180, play_buttony);
+
+		//if(off_shodow) off_button_sh.render(buttonx, play_buttony + 200);
+		 if(music) off_button.render(buttonx + 180, play_buttony + 100);
+		else off_button_on.render(buttonx + 180, play_buttony + 100);
 
 		if(!back_shadow) back_button.render(buttonx, play_buttony + 250);
 		else  back_button_sh.render(buttonx, play_buttony + 250);
@@ -362,6 +419,8 @@ void show_menu_otherscreen(SDL_Event e)
 			bravoos_shadow = 0;
 			back_shadow = 0;
 			if(e.type == SDL_MOUSEBUTTONDOWN){
+				if(sound)  Mix_HaltMusic();
+				if(music) Mix_PlayMusic(gPlayw, -1);
 				pwestors = 1;
 				pause = 0;
 				on_setting = 0;
@@ -371,6 +430,11 @@ void show_menu_otherscreen(SDL_Event e)
 				on_menu = 0;
 				on_select_map = 0;
 				on_play = 1;
+				live = 3;
+				wCurrentScore = 0;
+				bCurrentScore = 0;
+				coin_score = 0;
+				diamond_score = 0;
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 			}
 
@@ -382,6 +446,7 @@ void show_menu_otherscreen(SDL_Event e)
 			back_shadow = 0;
 
 			if(e.type == SDL_MOUSEBUTTONDOWN){
+				if(sound)  Mix_HaltMusic();
 				pwestors = 0;
 				pbravoos = 1;
 				pause = 0;
@@ -393,6 +458,11 @@ void show_menu_otherscreen(SDL_Event e)
 				on_select_map = 0;
 				blive = 3;
 				on_play = 1;
+				wCurrentScore = 0;
+				bCurrentScore = 0;
+				coin_score = 0;
+				diamond_score = 0;
+
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 			}
 		}
@@ -434,7 +504,8 @@ void show_menu_otherscreen(SDL_Event e)
 	}
 	else if(on_gameover){
 		SDL_GetMouseState(&x, &y);
-
+		if(sound && gameover_music) Mix_PlayChannel(-1, gLive, 0);
+		gameover_music = 0;
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 
@@ -472,14 +543,11 @@ void show_menu_otherscreen(SDL_Event e)
 			try_shadow = 1;
 			mainmenu_shadow = 0;
 			if(e.type == SDL_MOUSEBUTTONDOWN){
-				pinkmanx = 0;
 				pause = 0;
 				on_play = 1;
 				on_gameover = 0;
-				live = 1;
-				score = 0;
-				scroll = 0;
-				pinkmanx = 0;
+				gameover_music = 0;
+				reset();
 				if(pwestors)
 				{
 					if(wName.size() == 5) wName.pop_back();
@@ -516,11 +584,11 @@ void show_menu_otherscreen(SDL_Event e)
 				}
 				pwestors = 0;
 				pbravoos = 0;
+				gameover_music = 0;
 				//on_menu = 1;
 				on_gameover = 0;
-				live = 3;
-				pinkmanx = 0;
 				inputtext.clear();
+				reset();
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 				on_menu = 1;
 			}

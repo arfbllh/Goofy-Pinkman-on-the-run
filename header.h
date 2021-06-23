@@ -19,16 +19,30 @@ using namespace std;
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
+int g = 1; // gravity
+int ground = 570;
+int current_w_obstacle = 1;
+int reel = 0;
+int p = 0;
+int obsx = 1800;
+int obsy;
+int stonex = 200;
+int stones = 1;
+ll wtotal_dist = 0;
+int love_show = 0;
+int diamond_show = 0;
+int coin_show = 0;
+int lovex, lovey, loved, coinx, coiny, coined, diamondx, diamondy, diamonded;
+int coinscroll = 0, diamondscroll = 0, lovescroll = 0, fobsscroll = 0;
+int coin_score = 0, diamond_score = 0;
+int wspeed = 2;
+int fobsx, fobsy, fobs_show = 1;
+int x, y;
+double rotate_angle = 0.00;
+
 int sound = 1;
 int music = 1;
 int pause = 0;
-ll wCurrentScore = 0;
-
-ll wScore[5];
-
-vector<PLLS> wName, pName;
-string inputtext = "";
-
 int pinkmanx = 0;
 int pinkmany = 0;
 int vel = 10;
@@ -51,7 +65,7 @@ ll bCurrentScore = 0;
 ll pScore[5];
 ll bscore = 0;
 int bspeed = 4;
-int fx, fy;
+int fx = 200, fy = 360;
 int bstate = 0;
 int bscroll = 0;
 int blove_show = 0;
@@ -75,6 +89,10 @@ int chainscroll = 0;
 int middle1x = 300, middle1y = 300, middle_state = 0;
 int middle2x = 600, middle2y = 300;
 
+ll wCurrentScore = 0;
+ll wScore[5];
+vector<PLLS> wName, pName;
+string inputtext = "";
 
 
 
@@ -130,6 +148,8 @@ void close();
 //chek collision between two rectangle
 bool checkCollision( SDL_Rect a, SDL_Rect b );
 
+void reset();
+
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
 
@@ -138,6 +158,21 @@ SDL_Renderer* gRenderer = NULL;
 
 Mix_Music *gHelp = NULL;
 Mix_Chunk *gClick = NULL;
+Mix_Chunk *gCoin = NULL;
+Mix_Chunk *gDiamond = NULL;
+Mix_Chunk *gLove = NULL;
+Mix_Chunk *gGameOver = NULL;
+Mix_Chunk *gWater = NULL;
+Mix_Chunk *gObs = NULL;
+Mix_Chunk *gSpike = NULL;
+Mix_Chunk *gWall = NULL;
+Mix_Chunk *gCollchain = NULL;
+Mix_Chunk *gJump = NULL;
+Mix_Chunk *gStone = NULL;
+Mix_Chunk *gLive = NULL;
+Mix_Music *gMenu = NULL;
+Mix_Music *gPlayw = NULL;
+Mix_Music *gPlayb = NULL;
 
 //Scene textures
 LTexture gDotTexture;
@@ -526,9 +561,65 @@ void close()
 	IMG_Quit();
 	SDL_Quit();
 	TTF_Quit();
+
 }
 
 bool fsort(PLLS a, PLLS b)
 {
 	return a.ff > b.ff;
+}
+
+void reset()
+{
+	ground = 570;
+	current_w_obstacle = 1;
+	reel = 0;
+	p = 0;
+	obsx = 1800;
+	obsy;
+	stonex = 200;
+	stones = 1;
+	ll wtotal_dist = 0;
+	love_show = 0;
+	diamond_show = 0;
+	coin_show = 0;
+	coinscroll = 0, diamondscroll = 0, lovescroll = 0, fobsscroll = 0;
+	coin_score = 0, diamond_score = 0;
+	wspeed = 2;
+	fobs_show = 1;
+	rotate_angle = 0.00;
+
+	pause = 0;
+	pinkmanx = 0;
+	pinkmany = 0;
+	state = 0;
+
+	live = 3;
+	score = 0;
+	scroll = 0;
+
+	//bravoos map variable
+	bscreen = 0;
+	btotal_dist = 0;
+	bCurrentScore = 0;
+	bspeed = 4;
+	fx = 200, fy = 360;
+	bstate = 0;
+	bscroll = 0;
+	blove_show = 0;
+	bcoin_show = 0;
+	bdiamond_show = 0;
+	bdiamonded = 0;
+	bcoinscroll = 0, bdiamondscroll = 0, blovescroll = 0;
+	bcoin_score = 0, bdiamond_score = 0;
+	blive = 3;
+	bz = 0;
+	bzscroll = 0;
+	st = 0;
+	screen_speed = bspeed;
+	second = 0;
+	chainscroll = 0;
+	middle1x = 300, middle1y = 300, middle_state = 0;
+	middle2x = 600, middle2y = 300;
+
 }
