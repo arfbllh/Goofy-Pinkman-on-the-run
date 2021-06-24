@@ -1,5 +1,6 @@
 # Goopy PinKMan: On The Run
 ![Project Image](assets/logo.png)
+
 **Goopy PinKMan: On The Run is a 2D arcade Game.**
 
 The game can be played in GUI mode.The whole game is written in C. SDL2 libraries have been used to build the game.
@@ -7,7 +8,7 @@ The game can be played in GUI mode.The whole game is written in C. SDL2 librarie
 **The main objectives of the game:**
 1. To improve programming and problem solving skill in C
 2. For enjoyment
-3. To learn about how to build a game from scratch
+3. To build a game from scratch
 
 #Requirements
 	-gcc version 9.3
@@ -24,5 +25,5 @@ git https://github.com/arfbllh/Goofy-Pinkman-on-the-run
 # Commands to run
  Go to the the Goopy-PinkMan:-On-The-Run directory run the following command:
   - make
-  * To play in GUI Mode: ./play
+  - ./play
   
