@@ -44,11 +44,14 @@ bool loadMedia()
 	success = success & resume_button_sh.loadFromFile("assets/buttons/button_resume(1).png");
 	success = success & reset_button.loadFromFile("assets/buttons/button_reset.png");
 	success = success & reset_button_sh.loadFromFile("assets/buttons/button_reset(1).png");
-	success = success & music_button_sh.loadFromFile("assets/buttons/button_music.png");
+	success = success & music_button.loadFromFile("assets/buttons/button_music.png");
 	success = success & music_button_sh.loadFromFile("assets/buttons/button_music(1).png");
 
 	pause_button.mWidth = pause_button_sh.mWidth = 200;
 	pause_button.mHeight = pause_button_sh.mHeight = 50;
+
+	success = success & bHelp.loadFromFile("assets/bhelp.png");
+	success = success & wHelp.loadFromFile("assets/whelp.png");
 
 	//music
 
@@ -195,10 +198,24 @@ bool loadMedia()
 	fstream f2("score_board2.txt");
 	string name;
 	ll tscore;
-	while(f1>>name>>tscore){
+
+	if(f1 == NULL)
+	{
+		printf("FILE Error: Could not open score_board1.txt\n");
+		success = 0;
+	}
+	if(f2 == NULL)
+	{
+		printf("FILE Error: Could not open score_board2.txt\n");
+		success = 0;
+	}
+
+	while(f1>>name>>tscore)
+	{
 		wName.push_back(PLLS(tscore, name));
 	}
-	while(f2>>name>>tscore){
+	while(f2>>name>>tscore)
+	{
 		pName.push_back(PLLS(tscore, name));
 		//cout<<name<<endl;
 	}
@@ -227,8 +244,6 @@ bool loadMedia()
 	love1.mWidth = love1.mHeight = 50;
 	coinscoretexture.mWidth = coinscoretexture.mHeight = 30;
 	diamondscoretexture.mWidth = diamondscoretexture.mHeight = 30;
-
-
 
 
 	bg2.loadFromFile("assets/bg2/bg.png");
@@ -285,10 +300,7 @@ bool loadMedia()
 		upper[i].mWidth = 50;
 		upper[i].mHeight = 100 + rand()%50;
 	}
-	// for(int i = 0; i < 7; i++) {
-	// 	middle[i].mWidth = 400;
-	// 	middle[i].mHeight = 150 + rand()%50;
-	// }
+
 	for(int i = 0; i < 7; i++) {
 		lower[i].mWidth = 80;
 		lower[i].mHeight = 100 + rand()%100;

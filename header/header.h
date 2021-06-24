@@ -23,7 +23,6 @@ int g = 1; // gravity
 int ground = 570;
 int current_w_obstacle = 1;
 int reel = 0;
-int p = 0;
 int obsx = 1800;
 int obsy;
 int stonex = 200;
@@ -94,14 +93,14 @@ ll wScore[5];
 vector<PLLS> wName, pName;
 string inputtext = "";
 
-
+//Some colors to render text
 SDL_Color textColor1 = {153, 255, 255, 0xFF};
 SDL_Color textColor2 = {244, 244, 244, 0xFF};
 SDL_Color textColor3 = {255, 0, 255, 0xFF};
 SDL_Color textColor4 = {47, 136, 255, 0xFF};
 
 
-//Texture wrapper class
+//A class to render an object
 class LTexture
 {
 	public:
@@ -161,6 +160,7 @@ SDL_Window* gWindow = NULL;
 //The window renderer
 SDL_Renderer* gRenderer = NULL;
 
+//Sounds file variables
 Mix_Music *gHelp = NULL;
 Mix_Chunk *gClick = NULL;
 Mix_Chunk *gCoin = NULL;
@@ -193,22 +193,27 @@ LTexture pRun[10];
 LTexture pJump[10];
 //background texture
 LTexture forest, road, tree1, tree2, mashroom, bush1, bush2, bush3, water1, water2, path1, path2, path3, path4, path5;
+LTexture bg2;
+
+//menu and button variable
 LTexture play_button, play_button_sh, setting_button, setting_button_sh, score_button, score_button_sh, help_button, help_button_sh, quit_button, quit_button_sh;
 LTexture pause_button, pause_button_sh, resume_button, resume_button_sh;
 LTexture sound_button, on_button, on_button_sh, on_button_on, off_button, off_button_sh, off_button_on, back_button, back_button_sh;
 LTexture life, broken_heart, bravoos_button, bravoos_button_sh, westors_button, westors_button_sh;
 LTexture try_button, try_button_sh, mainmenu_button, mainmenu_button_sh, gameover, input_name0, input_name, reset_button, reset_button_sh, music_button, music_button_sh;
+LTexture logo, logo_char;
 LTexture pScoreCard, wScoreCard;
+LTexture wHelp, bHelp;
+
+//bonus texture variables
 LTexture coin, diamond, love, coin1, diamond1, love1;
 LTexture coinscoretexture1, diamondscoretexture1;
 LTexture coinscoretexture, diamondscoretexture;
+//obstacles
 LTexture fobs;
 LTexture obs[10];
 LTexture stone[5];
-LTexture logo, logo_char;
-
-TTF_Font *gFont = NULL;
-LTexture inputtexttexture, nametexture, scoretexture;
+LTexture wood1, wood2, wood3;
 
 //spikes
 LTexture rotating[5];
@@ -217,14 +222,16 @@ LTexture lower[7];
 LTexture middle[7];
 
 
-//bravoos texture
+TTF_Font *gFont = NULL;
+LTexture inputtexttexture, nametexture, scoretexture;
 
-LTexture wood1, wood2, wood3;
 
+
+//bravoos textur
 SDL_Color textColor = {0, 0, 0, 0};
 
-LTexture bg2;
 
+//Ltexture function starts
 LTexture::LTexture()
 {
 	//Initialize
@@ -374,6 +381,8 @@ int LTexture::getHeight()
 	return mHeight;
 }
 
+//Ltexture function ended
+
 bool init()
 {
 	//Initialization flag
@@ -442,7 +451,7 @@ bool init()
 	return success;
 }
 
-
+//a function to check collision between to rectangle
 bool checkCollision( SDL_Rect a, SDL_Rect b )
 {
     //The sides of the rectangles
@@ -488,6 +497,7 @@ bool checkCollision( SDL_Rect a, SDL_Rect b )
     return true;
 }
 
+//keyboard event for character moving
 void pinkman_handleEvent( SDL_Event& e )
 {
     //If a key was pressed
@@ -516,6 +526,7 @@ void pinkman_handleEvent( SDL_Event& e )
     }
 }
 
+//moving function
 void pinkman_move(int &x, int &y)
 {
     //Move the dot left or right
@@ -580,7 +591,6 @@ void reset()
 	ground = 570;
 	current_w_obstacle = 1;
 	reel = 0;
-	p = 0;
 	obsx = 1800;
 	obsy;
 	stonex = 200;
