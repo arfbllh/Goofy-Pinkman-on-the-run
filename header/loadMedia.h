@@ -68,6 +68,10 @@ bool loadMedia()
 
 
 	//character
+	success = success & logo.loadFromFile("assets/logo.png");
+	logo.mWidth = 400;
+	logo.mHeight = 200;
+	success = success & logo_char.loadFromFile("assets/front/8.png");
 	//fly
 	success = success & pFly[0].loadFromFile("assets/fly1.png");
 	success = success & pFly[1].loadFromFile("assets/fly2.png");

@@ -35,7 +35,7 @@ int coin_show = 0;
 int lovex, lovey, loved, coinx, coiny, coined, diamondx, diamondy, diamonded;
 int coinscroll = 0, diamondscroll = 0, lovescroll = 0, fobsscroll = 0;
 int coin_score = 0, diamond_score = 0;
-int wspeed = 2;
+int wspeed = 5;
 int fobsx, fobsy, fobs_show = 1;
 int x, y;
 double rotate_angle = 0.00;
@@ -94,6 +94,11 @@ ll wScore[5];
 vector<PLLS> wName, pName;
 string inputtext = "";
 
+
+SDL_Color textColor1 = {153, 255, 255, 0xFF};
+SDL_Color textColor2 = {244, 244, 244, 0xFF};
+SDL_Color textColor3 = {255, 0, 255, 0xFF};
+SDL_Color textColor4 = {47, 136, 255, 0xFF};
 
 
 //Texture wrapper class
@@ -200,6 +205,7 @@ LTexture coinscoretexture, diamondscoretexture;
 LTexture fobs;
 LTexture obs[10];
 LTexture stone[5];
+LTexture logo, logo_char;
 
 TTF_Font *gFont = NULL;
 LTexture inputtexttexture, nametexture, scoretexture;
@@ -585,7 +591,7 @@ void reset()
 	coin_show = 0;
 	coinscroll = 0, diamondscroll = 0, lovescroll = 0, fobsscroll = 0;
 	coin_score = 0, diamond_score = 0;
-	wspeed = 2;
+	wspeed = 5;
 	fobs_show = 1;
 	rotate_angle = 0.00;
 
@@ -602,7 +608,7 @@ void reset()
 	bscreen = 0;
 	btotal_dist = 0;
 	bCurrentScore = 0;
-	bspeed = 4;
+	bspeed = 5;
 	fx = 200, fy = 360;
 	bstate = 0;
 	bscroll = 0;

@@ -1,11 +1,20 @@
-#include "header.h"
-#include "menu_other_screen.cpp"
-#include "loadMedia.cpp"
+#include "header/header.h"
+#include "header/menu_other_screen.h"
+#include "header/loadMedia.h"
 
 #define MIN(x, y) (x < y) ? x : y
 #define MAX(x, y) (x > y) ? x : y
 
+Uint32 time_coll = 0;
 
+bool timecheck(int time)
+{
+	Uint32 timenow = SDL_GetTicks();
+
+	if(timenow - time >= 3000) return 1;
+	if(timenow - time <= 10) return 0;
+	return 0;
+}
 void wbackground(SDL_Event &e)
 {
 
@@ -74,21 +83,21 @@ void wbackground(SDL_Event &e)
 	}
 
 	std::string temp = to_string(coin_score);
-	coinscoretexture1.loadFromRenderedText(temp.c_str(), textColor);
+	coinscoretexture1.loadFromRenderedText(temp.c_str(), textColor3);
 	coinscoretexture.render(880, 5);
 	coinscoretexture1.render(930, 0);
 	temp = to_string(diamond_score);
-	diamondscoretexture1.loadFromRenderedText(temp.c_str(), textColor);
+	diamondscoretexture1.loadFromRenderedText(temp.c_str(), textColor3);
 	diamondscoretexture.render(980, 5);
 	diamondscoretexture1.render(1030, 0);
 
 	temp = to_string(wCurrentScore);
-	scoretexture.loadFromRenderedText(temp, textColor);
+	scoretexture.loadFromRenderedText(temp, textColor3);
 	scoretexture.render(600, 0);
 
 
 	if(fobs_show)
-		fobs.render(fobsx + scroll, fobsy, NULL, NULL, NULL, SDL_FLIP_VERTICAL);
+		fobs.render(fobsx + scroll, fobsy);
 
 	SDL_GetMouseState(&x, &y);
 	
@@ -118,18 +127,6 @@ void bbackground(SDL_Event &e)
 		life.render(i*30, 0);
 	}
 
-	std::string temp = to_string(bcoin_score);
-	coinscoretexture1.loadFromRenderedText(temp.c_str(), textColor);
-	coinscoretexture.render(880, 5);
-	coinscoretexture1.render(930, 0);
-	temp = to_string(bdiamond_score);
-	diamondscoretexture1.loadFromRenderedText(temp.c_str(), textColor);
-	diamondscoretexture.render(980, 5);
-	diamondscoretexture1.render(1030, 0);
-
-	temp = to_string(bCurrentScore);
-	scoretexture.loadFromRenderedText(temp, textColor);
-	scoretexture.render(600, 0);
 
 	SDL_GetMouseState(&x, &y);
 	if(over_button(x, y, SCREEN_WIDTH - 210, 5, 200, 50)){
@@ -170,6 +167,20 @@ void bbackground(SDL_Event &e)
 		middle[middle_state].render(chainscroll + middle1x + SCREEN_WIDTH, middle1y);
 		middle[(middle_state+1)%7].render(chainscroll + middle2x + SCREEN_WIDTH, middle2y);
 	}
+
+	std::string temp = to_string(bcoin_score);
+	coinscoretexture1.loadFromRenderedText(temp.c_str(), textColor2);
+	coinscoretexture.render(880, 5);
+	coinscoretexture1.render(930, 0);
+	temp = to_string(bdiamond_score);
+	diamondscoretexture1.loadFromRenderedText(temp.c_str(), textColor2);
+	diamondscoretexture.render(980, 5);
+	diamondscoretexture1.render(1030, 0);
+
+	temp = to_string(bCurrentScore);
+	scoretexture.loadFromRenderedText(temp, textColor2);
+	scoretexture.render(600, 0);
+
 
 }
 
@@ -235,6 +246,11 @@ int main()
 
 				btotal_dist += bspeed;
 
+				if(btotal_dist >= SCREEN_WIDTH){
+					bspeed = MIN(bspeed + 1, 10);
+					btotal_dist = 0;
+				}
+
 
 				if(btotal_dist%20 == bspeed) bCurrentScore++;
 
@@ -263,16 +279,16 @@ int main()
 				}
 			
 				//printf("%d %d\n", pinkmanx, pinkmany);
-				blovescroll += wspeed; 
-				bcoinscroll += wspeed; 
-				bdiamondscroll += wspeed;
+				blovescroll += bspeed; 
+				bcoinscroll += bspeed; 
+				bdiamondscroll += bspeed;
 
 				if(bz) for(int i = 0; i < 7; i++)
 				{
 					SDL_Rect a = {fx, fy, pFly[state].mWidth - 5, pFly[state].mHeight - 5};
 					SDL_Rect b = {rx[i] + bzscroll, ry[i], rotating[id[i]].mWidth, rotating[id[i]].mHeight};
-
-					if(checkCollision(a, b)){
+					Uint32 timenow = SDL_GetTicks();
+					if(checkCollision(a, b) && timecheck(time_coll)){
 						if(sound) Mix_PlayChannel(-1, gSpike, 0);
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -298,8 +314,8 @@ int main()
 					SDL_Rect a = {fx, fy, pFly[state].mWidth - 5, pFly[state].mHeight - 5};
 					SDL_Rect b = {chainscroll + i*180 + SCREEN_WIDTH, -5, upper[i].mWidth, upper[i].mHeight};
 					SDL_Rect c = {chainscroll + i*180 + SCREEN_WIDTH, SCREEN_HEIGHT - lower[i].mHeight, lower[i].mWidth, lower[i].mHeight};
-
-					if(checkCollision(a, b) || checkCollision(a, c)){
+					
+					if(checkCollision(a, b) || checkCollision(a, c) && timecheck(time_coll)){
 						if(sound) Mix_PlayChannel(-1, gObs, 0);
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -324,8 +340,8 @@ int main()
 				SDL_Rect a = {fx, fy, pFly[state].mWidth - 5, pFly[state].mHeight - 5};
 				SDL_Rect b = {chainscroll + middle1x + SCREEN_WIDTH, middle1y, middle[middle_state].mWidth, middle[middle_state].mHeight};
 				SDL_Rect c = {chainscroll + middle2x + SCREEN_WIDTH, middle2y, middle[(middle_state + 1)%7].mWidth, middle[(middle_state + 1)%7].mHeight};
-
-				if(checkCollision(a, b) || checkCollision(a, c)){
+				Uint32 timenow = SDL_GetTicks();
+				if(checkCollision(a, b) || checkCollision(a, c) && timecheck(time_coll)){
 					if(sound) Mix_PlayChannel(-1, gObs, 0);
 					for(int i = 0; i < 6; i++){
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -470,7 +486,7 @@ int main()
 				
 				//wbackground
 				wbackground(e);				
-				scroll -= 4;
+				scroll -= wspeed;
 				if(scroll < -2*SCREEN_WIDTH) {
 					scroll = 0;
 					current_w_obstacle++;
@@ -501,13 +517,20 @@ int main()
 				if(keystates[SDL_SCANCODE_RETURN] || keystates[SDL_SCANCODE_J]) {
 					//give a jump
 					if(sound) Mix_PlayChannel(-1, gJump, 0);
-					int y[9] = {287, 317, 347, 377, 377, 330, 317, 287, 287};
+					int y[9] = {287, 317, 347, 377, 377, 330, 317, 250, 250};
 					for(int i = 0; i < 9; i++){
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 						SDL_RenderClear(gRenderer);
 
 						//wbackground
 						wbackground(e);
+						if(fobs_show)
+						{
+							fobsy = MIN(ground - fobs.mHeight, fobsy + wspeed);
+							fobs_show -= wspeed;
+							if(fobs_show < 0) fobs_show = 0;
+
+						}
 
 						pJump[i].render(pinkmanx, SCREEN_HEIGHT - y[i]);
 
@@ -515,7 +538,7 @@ int main()
 						SDL_Rect b = {scroll + SCREEN_WIDTH + 515, SCREEN_HEIGHT - 150 + 50, water2.mWidth, water2.mHeight};
 						SDL_Rect c = {obsx, obsy, obs[current_w_obstacle].mWidth, obs[current_w_obstacle].mHeight};
 						SDL_Rect f = {-1, -1, 0, 0};
-						if(fobs_show > 0) f = {fobsx + scroll, fobsy, fobs.mWidth, fobs.mHeight};
+						if(fobs_show > 0) f = {fobsx + scroll, fobsy + 15, fobs.mWidth, fobs.mHeight};
 
 						bool die = 0;
 
@@ -529,10 +552,11 @@ int main()
 						}
 						if(checkCollision(pink, f)){
 							if(sound) Mix_PlayChannel(-1, gSpike, 0);
+							//printf("%d %d %d %d\n", fobsx + scroll, fobsy + 15, fobs.mWidth, fobs.mHeight);
 							die = 1;
 						}
-
-						if(die){
+						if(die && timecheck(time_coll)){
+							time_coll = SDL_GetTicks();
 							for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 							SDL_RenderClear(gRenderer);
@@ -592,7 +616,8 @@ int main()
 						SDL_Delay(50);
 						//printf("%d\n", y[i]);
 
-						pinkmanx += 60 - (i >= 7)*60;
+						pinkmanx += 60 - (i >= 8)*60;
+						btotal_dist += 60 - (i >= 8)*60;
 						//scroll -= 12;
 					}
 
@@ -629,7 +654,7 @@ int main()
 					SDL_Rect c = {-obsx + scroll + 2*SCREEN_WIDTH, obsy, obs[current_w_obstacle].mWidth, obs[current_w_obstacle].mHeight};
 					SDL_Rect d = {-stonex + scroll + 2*SCREEN_WIDTH, 570 - stone[stones].mHeight, stone[stones].mWidth, stone[stones].mHeight};
 					SDL_Rect f = {0, 0, 0, 0};
-					if(fobs_show > 0) f = {fobsx + scroll, fobsy, fobs.mWidth, fobs.mHeight};
+					if(fobs_show > 0) f = {fobsx + scroll, fobsy + 15, fobs.mWidth, fobs.mHeight};
 					bool die = 0;
 					if(checkCollision(pink, b)){
 						if(sound) Mix_PlayChannel(-1, gWater, 0);
@@ -645,9 +670,11 @@ int main()
 					}
 					if(checkCollision(pink, f)){
 						if(sound) Mix_PlayChannel(-1, gSpike, 0);
+						//printf("%d %d %d %d\n", fobsx + scroll, fobsy + 15, fobs.mWidth, fobs.mHeight);
 						die = 1;
 					}
-					if(die){
+					if(die && timecheck(time_coll)){
+						time_coll = SDL_GetTicks();
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 							SDL_RenderClear(gRenderer);
@@ -769,8 +796,10 @@ int main()
 				diamondscroll += wspeed; 
 				fobsscroll += wspeed;
 
-				if(wtotal_dist%(2*SCREEN_WIDTH) == 0){
+				if(wtotal_dist >= SCREEN_WIDTH){
 					wspeed = min(wspeed + 1, 10);
+					wtotal_dist = 0;
+					//printf("here");
 				}
 				//printf("%d\n", wspeed);
 				if(wtotal_dist%20 == 0) wCurrentScore++;

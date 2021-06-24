@@ -51,6 +51,8 @@ int off_shodow1 = 1;
 int on_shadow1 = 0;
 int off_on1 = 0;
 int on_on1 = 1;
+int logof = 0;
+int logos = 0;
 
 bool over_button(int mouse_x,int mouse_y, int button_x, int button_y, int button_width, int button_height)
 {
@@ -225,6 +227,9 @@ void show_menu_otherscreen(SDL_Event e)
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 
+		logo.render(buttonx, 0);
+		logo_char.render(buttonx - 40, 100);
+
 		if(pause && !pause_shadow) resume_button.render(buttonx, pause_buttony);
 		else if(pause) resume_button_sh.render(buttonx, pause_buttony);
 
@@ -243,7 +248,6 @@ void show_menu_otherscreen(SDL_Event e)
 		if(!quit_shadow) quit_button.render(buttonx, quit_buttony);
 		else quit_button_sh.render(buttonx, quit_buttony);
 		//printf("%d %d\n", x, y);
-
 
 		SDL_RenderPresent(gRenderer);
 
@@ -619,9 +623,9 @@ void show_menu_otherscreen(SDL_Event e)
 		reset_button.mHeight = reset_button_sh.mHeight = 50;
 		for(int i = 0; i < wName.size(); i++)
 		{
-			nametexture.loadFromRenderedText(wName[i].ss.c_str(), textColor);
+			nametexture.loadFromRenderedText(wName[i].ss.c_str(), textColor4);
 			string temp = to_string(wName[i].ff);
-			scoretexture.loadFromRenderedText(temp.c_str(), textColor);
+			scoretexture.loadFromRenderedText(temp.c_str(), textColor4);
 			nametexture.render(px, py);
 			scoretexture.render(950, py);
 			py += intervel;
@@ -629,9 +633,9 @@ void show_menu_otherscreen(SDL_Event e)
 		py = 480;
 		for(int i = 0; i < pName.size(); i++)
 		{
-			nametexture.loadFromRenderedText(pName[i].ss.c_str(), textColor);
+			nametexture.loadFromRenderedText(pName[i].ss.c_str(), textColor4);
 			string temp = to_string(pName[i].ff);
-			scoretexture.loadFromRenderedText(temp.c_str(), textColor);
+			scoretexture.loadFromRenderedText(temp.c_str(), textColor4);
 			nametexture.render(px, py);
 			scoretexture.render(950, py);
 			py += intervel;
