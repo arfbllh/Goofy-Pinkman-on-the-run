@@ -10,12 +10,10 @@ The game can be played in GUI mode.The whole game is written in C. SDL2 librarie
 2. For enjoyment
 3. To build a game from scratch
 
-#Requirements
-	-gcc version 9.3
-	-SDL2
-	-SDL2_image
-	-SDL2_ttf
-	-SDL2_mixer
+# Requirements
+  ## LINUX:
+  - Libraries for Debian Based Distributoins : ```build-essential``` ```libsdl2-dev``` ```libsdl2-image-dev``` ```libsdl2-ttf-dev``` ```libsdl2-mixer-dev```
+  - make
 
 # Clone the Repository
 ```
