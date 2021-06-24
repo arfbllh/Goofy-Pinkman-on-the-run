@@ -1,7 +1,7 @@
 # Goopy PinKMan: On The Run
 ![Project Image](assets/logo.png)
 
-**Goopy PinKMan: On The Run is a 2D arcade Game.**
+**Goopy PinKMan: On The Run is a 2D infinite runner Game.**
 
 The game can be played in GUI mode.The whole game is written in C. SDL2 libraries have been used to build the game.
 
@@ -12,7 +12,8 @@ The game can be played in GUI mode.The whole game is written in C. SDL2 librarie
 
 # Requirements
   ## LINUX:
-  - Libraries for Debian Based Distributoins : ```build-essential``` ```libsdl2-dev``` ```libsdl2-image-dev``` ```libsdl2-ttf-dev``` ```libsdl2-mixer-dev```
+  - Libraries for Debian Based Distributoins : ```build-essential``` ```libsdl2-dev``` ```libsdl2-image-dev``` 
+  ```libsdl2-ttf-dev``` ```libsdl2-mixer-dev```
   - make
 
 # Clone the Repository
