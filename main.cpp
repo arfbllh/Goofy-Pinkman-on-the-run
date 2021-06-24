@@ -1,5 +1,5 @@
 #include "header/header.h"
-#include "header/menu_other_screen.h"
+#include "header/gui.h"
 #include "header/loadMedia.h"
 
 #define MIN(x, y) (x < y) ? x : y
