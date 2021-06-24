@@ -199,6 +199,8 @@ int main()
 	if(!init()) {
 		return 0;
 	}
+
+	reset();
 	//if there is any problem to load any media, the game will stop with proper warnings
 	if(!loadMedia()) 
 	{
@@ -263,7 +265,7 @@ int main()
 
 				btotal_dist += bspeed;
 
-				if(btotal_dist >= SCREEN_WIDTH)
+				if(btotal_dist >= (2*SCREEN_WIDTH))
 				{
 					bspeed = MIN(bspeed + 1, 10);
 					btotal_dist = 0;
@@ -309,8 +311,9 @@ int main()
 				{
 					SDL_Rect a = {fx, fy, pFly[state].mWidth - 5, pFly[state].mHeight - 5};
 					SDL_Rect b = {rx[i] + bzscroll, ry[i], rotating[id[i]].mWidth, rotating[id[i]].mHeight};
-					Uint32 timenow = SDL_GetTicks();
-					if(checkCollision(a, b) && timecheck(time_coll)){
+					if(checkCollision(a, b) && timecheck(time_coll))
+					{
+						time_coll = SDL_GetTicks();
 						if(sound) Mix_PlayChannel(-1, gSpike, 0);
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -322,6 +325,7 @@ int main()
 						}
 						blive--;
 						fx = fx + 500;
+						fy = 400;
 						break;						
 					}
 				}
@@ -337,7 +341,9 @@ int main()
 					SDL_Rect b = {chainscroll + i*180 + SCREEN_WIDTH, -5, upper[i].mWidth, upper[i].mHeight};
 					SDL_Rect c = {chainscroll + i*180 + SCREEN_WIDTH, SCREEN_HEIGHT - lower[i].mHeight, lower[i].mWidth, lower[i].mHeight};
 					
-					if(checkCollision(a, b) || checkCollision(a, c) && timecheck(time_coll)){
+					if(checkCollision(a, b) || checkCollision(a, c) && timecheck(time_coll))
+					{
+						time_coll = SDL_GetTicks();
 						if(sound) Mix_PlayChannel(-1, gObs, 0);
 						for(int i = 0; i < 6; i++){
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -411,7 +417,8 @@ int main()
 					bcoin_show -= bspeed;
 
 				}
-				if(bdiamond_show > 0 && !bdiamonded){
+				if(bdiamond_show > 0 && !bdiamonded)
+				{
 					SDL_Rect a = {fx, fy, pFly[bstate].mWidth, pFly[bstate].mHeight};
 					SDL_Rect drect = {bdiamondx + bscroll, bdiamondy, diamond.mWidth, diamond.mHeight};
 					if(checkCollision(a, drect)){

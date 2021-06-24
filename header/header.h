@@ -601,7 +601,7 @@ void reset()
 	coin_show = 0;
 	coinscroll = 0, diamondscroll = 0, lovescroll = 0, fobsscroll = 0;
 	coin_score = 0, diamond_score = 0;
-	wspeed = 5;
+	wspeed = 4;
 	fobs_show = 1;
 	rotate_angle = 0.00;
 
@@ -618,7 +618,7 @@ void reset()
 	bscreen = 0;
 	btotal_dist = 0;
 	bCurrentScore = 0;
-	bspeed = 5;
+	bspeed = 4;
 	fx = 200, fy = 360;
 	bstate = 0;
 	bscroll = 0;
