@@ -130,7 +130,6 @@ bool loadMedia()
 	path5.mWidth = 515;
 	path1.mWidth = SCREEN_WIDTH;
 
-
 	//life
 	success = success & life.loadFromFile("assets/life.png");
 	success = success & broken_heart.loadFromFile("assets/broken_heart.png");
@@ -169,6 +168,7 @@ bool loadMedia()
 	success = success & stone[3].loadFromFile("assets/obs/stone3.png");
 	success = success & stone[4].loadFromFile("assets/obs/stone4.png");
 
+
 	for(int i = 1; i < 4; i++){
 		stone[i].mWidth = 80;
 		stone[i].mHeight = 50;
@@ -198,17 +198,6 @@ bool loadMedia()
 	fstream f2("score_board2.txt");
 	string name;
 	ll tscore;
-
-	if(f1 == NULL)
-	{
-		printf("FILE Error: Could not open score_board1.txt\n");
-		success = 0;
-	}
-	if(f2 == NULL)
-	{
-		printf("FILE Error: Could not open score_board2.txt\n");
-		success = 0;
-	}
 
 	while(f1>>name>>tscore)
 	{

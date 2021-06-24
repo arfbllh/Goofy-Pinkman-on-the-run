@@ -103,7 +103,7 @@ void wbackground(SDL_Event &e)
 	
 	if(over_button(x, y, SCREEN_WIDTH - 210, 5, 200, 50))
 	{
-		SDL_Delay(25);
+		//SDL_Delay(25);
 		if(music) Mix_HaltMusic();
 		pause_shadow = 1;
 		if(e.type == SDL_MOUSEBUTTONDOWN){
@@ -134,7 +134,6 @@ void bbackground(SDL_Event &e)
 	SDL_GetMouseState(&x, &y);
 	if(over_button(x, y, SCREEN_WIDTH - 210, 5, 200, 50))
 	{
-		SDL_Delay(25);
 		pause_shadow = 1;
 		if(e.type == SDL_MOUSEBUTTONDOWN)
 		{
@@ -459,7 +458,7 @@ int main()
 					{
 						if(bzscroll + rotating[id[i]].mWidth > -SCREEN_WIDTH) tmp |= 1;
 					}
-					
+
 					if(tmp == 0) bz = 0;
 
 					if(bz)

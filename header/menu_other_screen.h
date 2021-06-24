@@ -98,6 +98,7 @@ void show_menu_otherscreen(SDL_Event e)
 			quit_shadow = 0;
 			if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
 			{
+				if(music) Mix_PlayMusic(gPlayw, -1);
 				pause = 0;
 				on_setting = 0;
 				on_help = 0;
@@ -395,7 +396,7 @@ void show_menu_otherscreen(SDL_Event e)
 		SDL_RenderClear(gRenderer);
 
 
-		if(Mix_PlayingMusic() == 0) Mix_PlayMusic(gHelp, -1);
+		//if(Mix_PlayingMusic() == 0) Mix_PlayMusic(gHelp, -1);
 
 		if(over_button(x, y, buttonx, play_buttony + 250, button_width, button_height))
 		{
