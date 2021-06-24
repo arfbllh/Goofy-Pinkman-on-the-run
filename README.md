@@ -23,7 +23,7 @@ git https://github.com/arfbllh/Goofy-Pinkman-on-the-run
 ```
 
 # Commands to run
- Go to the the Goopy-PinkMan:-On-The-Run directory run the following command:
+ Go to the the Goofy-Pinkman-on-the-run directory run the following command:
   - make
   - ./play
   
