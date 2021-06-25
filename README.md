@@ -28,4 +28,8 @@ git https://github.com/arfbllh/Goofy-Pinkman-on-the-run
   
   
 # Youtube link
-	- https://youtu.be/SX4tD84SVU4
+	- 
+	<a href="http://www.youtube.com/watch?feature=player_embedded&v=SX4tD84SVU4E
+" target="_blank"><img src="http://img.youtube.com/vi/SX4tD84SVU4E/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
