@@ -405,7 +405,7 @@ bool init()
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow( "Goopy PinkMan: On The Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow( "Goofy PinkMan: On The Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if( gWindow == NULL )
 		{
 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -532,7 +532,7 @@ void pinkman_move(int &x, int &y)
     //Move the dot left or right
     x += mVelX;
 
-    //if(x < 0) x = 0;
+    if(x < 0) x = 0;
 
     //Move the dot up or down
     y += mVelY;

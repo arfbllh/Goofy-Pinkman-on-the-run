@@ -576,7 +576,6 @@ void show_menu_otherscreen(SDL_Event e)
 				on_play = 1;
 				on_gameover = 0;
 				gameover_music = 0;
-				reset();
 				if(music) Mix_PlayMusic(gPlayw, -1);
 				if(pwestors)
 				{
@@ -590,6 +589,7 @@ void show_menu_otherscreen(SDL_Event e)
 					sort(pName.begin(), pName.end(), fsort);
 				}
 				inputtext.clear();
+				reset();
 				if(sound) Mix_PlayChannel(-1, gClick, 0);
 			}
 

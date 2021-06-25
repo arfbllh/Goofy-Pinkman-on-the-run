@@ -279,8 +279,8 @@ int main()
 				if(blovescroll >= 1500 && blove_show <= 0)
 				{
 					blove_show = SCREEN_WIDTH;
-					blovex = fx + rand()%700;ss
-					blovey = ground - rand()%150 - 50;
+					blovex = fx + rand()%1000;
+					blovey = rand()%SCREEN_HEIGHT;
 					bloved = 0;
 					blovescroll = 0;
 				}
@@ -296,8 +296,8 @@ int main()
 				if(bdiamondscroll >= 1280)
 				{
 					bdiamond_show = SCREEN_WIDTH;;
-					bdiamondx = SCREEN_WIDTH - bscroll - rand()%500;
-					bdiamondy = ground - rand()%100 - 50;
+					bdiamondx = fx + rand()%800;
+					bdiamondy = rand()%SCREEN_HEIGHT;
 					bdiamonded = 0;
 					bdiamondscroll = 0;
 				}
@@ -372,6 +372,7 @@ int main()
 				if(checkCollision(a, b) || checkCollision(a, c) && timecheck(time_coll))
 				{
 					if(sound) Mix_PlayChannel(-1, gObs, 0);
+					time_coll = SDL_GetTicks();
 					for(int i = 0; i < 6; i++){
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 						SDL_RenderClear(gRenderer);
@@ -559,13 +560,7 @@ int main()
 
 						//wbackground
 						wbackground(e);
-						// if(fobs_show)
-						// {
-						// 	fobsy = MIN(ground - fobs.mHeight, fobsy + wspeed);
-						// 	fobs_show -= wspeed;
-						// 	if(fobs_show < 0) fobs_show = 0;
-						// }
-
+		
 						pJump[i].render(pinkmanx, SCREEN_HEIGHT - y[i]);
 
 						SDL_Rect pink = {pinkmanx, SCREEN_HEIGHT - y[i], pJump[i].mWidth, pJump[i].mHeight};
@@ -717,6 +712,7 @@ int main()
 					if(die && timecheck(time_coll))
 					{
 						time_coll = SDL_GetTicks();
+
 						for(int i = 0; i < 6; i++)
 						{
 							SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -837,7 +833,7 @@ int main()
 				if(fobsscroll >= 1500)
 				{
 					fobs_show = SCREEN_WIDTH;
-					fobsx = SCREEN_WIDTH - scroll - 200;
+					fobsx = SCREEN_WIDTH - scroll - 200 - rand()%300;
 					fobsy = 0;
 					fobsscroll = 0;
 				}
