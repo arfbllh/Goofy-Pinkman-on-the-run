@@ -533,7 +533,8 @@ void show_menu_otherscreen(SDL_Event e)
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 
-		gameover.render(buttonx, SCREEN_HEIGHT/2 - 300);
+		printf("%d %d\n", x, y);
+		gameover.render(buttonx - 200, SCREEN_HEIGHT/2 - 300);
 
 		input_name0.render(buttonx - 100, buttony);
 		input_name.render(buttonx - 100, buttony + button_interval);

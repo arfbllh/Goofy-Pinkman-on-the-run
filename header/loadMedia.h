@@ -150,8 +150,8 @@ bool loadMedia()
 	input_name.mWidth = 500;
 	input_name0.mHeight = 70;
 	input_name.mHeight = 70;
-	gameover.mWidth = 300;
-	gameover.mHeight = 250;
+	//gameover.mWidth = 300;
+	//gameover.mHeight = 250;
 
 
 	//obstacle
