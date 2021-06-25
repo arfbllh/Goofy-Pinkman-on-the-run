@@ -399,7 +399,7 @@ void show_menu_otherscreen(SDL_Event e)
 
 		//if(Mix_PlayingMusic() == 0) Mix_PlayMusic(gHelp, -1);
 
-		if(over_button(x, y, buttonx, play_buttony + 250, button_width, button_height))
+		if(over_button(x, y, 5, 5, button_width, button_height))
 		{
 			SDL_Delay(25);
 			back_shadow = 1;
@@ -415,8 +415,8 @@ void show_menu_otherscreen(SDL_Event e)
 		else back_shadow = 0;
 		wHelp.render(buttonx, 0);
 		bHelp.render(buttonx, 320);
-		if(!back_shadow) back_button.render(buttonx, play_buttony + 280);
-		else back_button_sh.render(buttonx, play_buttony + 280);
+		if(!back_shadow) back_button.render(5, 5);
+		else back_button_sh.render(5, 5);
 
 		SDL_RenderPresent(gRenderer);
 
