@@ -550,9 +550,9 @@ void close()
 	//Free loaded images
 	
 	ofstream f1;
-	f1.open("score_board1.txt");
+	f1.open("file/score_board1.txt");
 	ofstream f2;
-	f2.open("score_board2.txt");
+	f2.open("file/score_board2.txt");
 	for(int i = 0; i < wName.size(); i++){
 		f1<<wName[i].ss<<" "<<wName[i].ff<<endl;
 		//cout<<wName[i].ss<<" "<<wName[i].ff<<endl;

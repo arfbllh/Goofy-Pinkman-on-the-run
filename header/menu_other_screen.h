@@ -68,6 +68,7 @@ void show_menu_otherscreen(SDL_Event e)
 	menu_music = 0;
 	if(on_menu)
 	{
+		bg2.render(0, 0);
 		if(pause && !pause_shadow) resume_button.render(buttonx, play_buttony);
 		else if(pause) resume_button_sh.render(buttonx, play_buttony);
 
@@ -628,7 +629,7 @@ void show_menu_otherscreen(SDL_Event e)
 		SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(gRenderer);
 
-
+		//bg2.render(0, 0);
 		wScoreCard.render(0, 0);
 		pScoreCard.render(0, 350);
 		int intervel = 45;

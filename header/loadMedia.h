@@ -194,8 +194,8 @@ bool loadMedia()
 	}
 
 	//file opening	
-	fstream f1("score_board1.txt");
-	fstream f2("score_board2.txt");
+	fstream f1("file/score_board1.txt");
+	fstream f2("file/score_board2.txt");
 	string name;
 	ll tscore;
 
