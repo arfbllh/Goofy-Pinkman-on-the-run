@@ -64,7 +64,7 @@ bool over_button(int mouse_x,int mouse_y, int button_x, int button_y, int button
 void show_menu_otherscreen(SDL_Event e)
 {
 	int x, y;
-	if(music && menu_music) Mix_PlayMusic(gMenu, -1);
+	if(music && Mix_PlayingMusic() == 0) Mix_PlayMusic(gMenu, -1);
 	menu_music = 0;
 	if(on_menu)
 	{
@@ -577,6 +577,7 @@ void show_menu_otherscreen(SDL_Event e)
 				on_gameover = 0;
 				gameover_music = 0;
 				reset();
+				if(music) Mix_PlayMusic(gPlayw, -1);
 				if(pwestors)
 				{
 					if(wName.size() == 5) wName.pop_back();
@@ -599,7 +600,8 @@ void show_menu_otherscreen(SDL_Event e)
 			try_shadow = 0;
 			mainmenu_shadow = 1;
 
-			if(e.type == SDL_MOUSEBUTTONDOWN){
+			if(e.type == SDL_MOUSEBUTTONDOWN)
+			{
 				if(pwestors)
 				{
 					if(wName.size() == 5) wName.pop_back();

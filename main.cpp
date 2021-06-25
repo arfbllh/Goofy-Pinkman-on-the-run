@@ -11,7 +11,7 @@ bool timecheck(int time)
 {
 	Uint32 timenow = SDL_GetTicks();
 
-	if(timenow - time >= 3000) return 1;
+	if(timenow - time >= 2000) return 1;
 	if(timenow - time <= 10) return 0;
 	return 0;
 }
@@ -279,7 +279,7 @@ int main()
 				if(blovescroll >= 1500 && blove_show <= 0)
 				{
 					blove_show = SCREEN_WIDTH;
-					blovex = SCREEN_WIDTH - bscroll - rand()%200;
+					blovex = fx + rand()%700;ss
 					blovey = ground - rand()%150 - 50;
 					bloved = 0;
 					blovescroll = 0;
@@ -288,8 +288,8 @@ int main()
 				if(bcoinscroll >= 600)
 				{
 					bcoin_show = SCREEN_WIDTH;
-					bcoinx = SCREEN_WIDTH - bscroll - rand()%500;
-					bcoiny = ground - rand()%50 - 50;
+					bcoinx = fx + rand()%500;
+					bcoiny = rand()%SCREEN_HEIGHT;
 					bcoined = 0;
 					bcoinscroll = 0;
 				}
@@ -551,6 +551,7 @@ int main()
 					//give a jump
 					if(sound) Mix_PlayChannel(-1, gJump, 0);
 					int y[9] = {287, 317, 347, 377, 377, 330, 317, 250, 250};
+
 					for(int i = 0; i < 9; i++)
 					{
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -558,20 +559,21 @@ int main()
 
 						//wbackground
 						wbackground(e);
-						if(fobs_show)
-						{
-							fobsy = MIN(ground - fobs.mHeight, fobsy + wspeed);
-							fobs_show -= wspeed;
-							if(fobs_show < 0) fobs_show = 0;
-						}
+						// if(fobs_show)
+						// {
+						// 	fobsy = MIN(ground - fobs.mHeight, fobsy + wspeed);
+						// 	fobs_show -= wspeed;
+						// 	if(fobs_show < 0) fobs_show = 0;
+						// }
 
 						pJump[i].render(pinkmanx, SCREEN_HEIGHT - y[i]);
 
 						SDL_Rect pink = {pinkmanx, SCREEN_HEIGHT - y[i], pJump[i].mWidth, pJump[i].mHeight};
 						SDL_Rect b = {scroll + SCREEN_WIDTH + 515, SCREEN_HEIGHT - 150 + 50, water2.mWidth, water2.mHeight};
-						SDL_Rect c = {obsx, obsy, obs[current_w_obstacle].mWidth, obs[current_w_obstacle].mHeight};
+
+						SDL_Rect c = {-obsx + scroll + 2*SCREEN_WIDTH + 10, obsy + 30, obs[current_w_obstacle].mWidth - 5, obs[current_w_obstacle].mHeight - 10};
 						SDL_Rect f = {-1, -1, 0, 0};
-						if(fobs_show > 0) f = {fobsx + scroll, fobsy + 15, fobs.mWidth, fobs.mHeight};
+						if(fobs_show > 0) f = {fobsx + scroll + 10, fobsy + 20, fobs.mWidth - 10, fobs.mHeight};
 
 						bool die = 0;
 
@@ -652,7 +654,7 @@ int main()
 
 
 						SDL_RenderPresent(gRenderer);
-						SDL_Delay(50);
+						SDL_Delay(60);
 
 						pinkmanx += 60 - (i >= 8)*60;
 						btotal_dist += 60 - (i >= 8)*60;
